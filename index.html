@@ -3,19 +3,110 @@
 	<head>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
+		<link rel="stylesheet" href="styles.css">
 	</head>
 
 	<body>
-		<div id="score">
-			<label for="lblScore">SCORE:</label>
-			<input id="lblScore" type="text" />
+		<div class="pacman">
+			<div class="pacman-top"></div>
+			<div class="pacman-bottom"></div>
+			<div class="feed"></div>
 		</div>
-		<div id="time">
-			<label for="lblTime">TIME:</label>
-			<input id="lblTime" type="text" />
+		</br>
+		</br>
+
+		<divmenu id='cssmenu' align="center">
+			<ul>
+			   <li class='active' id="menuwelcome"><a href='#'>Welcome</a></li>
+			   <li id="menureg"><a href='#'>Register</a></li>
+			   <li id="menulogin"><a href='#'>Log in</a></li>
+			   <li id="menuabout"><a href='#'>About</a></li>
+			</ul>
+		</divmenu>
+
+		<div class="screen" id='welcomeScreen' align="center">
+			</br>
+			</br>
+			<input type=button class="button" id="loginButton" value="Log in">
+			</br>
+			</br>
+			<input type=button class="button" id="signupButton" value="Sign up">
 		</div>
-		<div id="game">
-			<canvas id="canvas" height="600" width="600"></canvas>
+
+
+		<div class="screen" id='gameScreen' style="display: none;">
+			<div id="score">
+				<label for="lblScore">SCORE:</label>
+				<input id="lblScore" type="text" />
+			</div>
+			<div id="time">
+				<label for="lblTime">TIME:</label>
+				<input id="lblTime" type="text" />
+			</div>
+			<div id="game">
+				<canvas id="canvas" height="600" width="600"></canvas>
+			</div>
 		</div>
+
+		<div class="screen" id='registerScreen' style="display: none;" align="center">
+		</br>
+		</br>
+			<form class="cmxform" id="signupForm" method="get" action="" novalidate="novalidate"> 
+				<fieldset>
+					<legend>Registration form</legend>
+					<p>
+						<label for="firstname">Firstname</label>
+						<input id="firstname" name="firstname" type="text">
+					</p>
+					<p>
+						<label for="lastname">Lastname</label>
+						<input id="lastname" name="lastname" type="text">
+					</p>
+					<p>
+						<label for="username">Username</label>
+						<input id="username" name="username" type="text">
+					</p>
+					<p>
+						<label for="password">Password</label>
+						<input id="password" name="password" type="password" aria-autocomplete="list">
+					</p>
+					<p>
+						<label for="confirm_password">Confirm password</label>
+						<input id="confirm_password" name="confirm_password" type="password">
+					</p>
+					<p>
+						<label for="email">Email</label>
+						<input id="email" name="email" type="email">
+					</p>
+					<p>
+						<input class="submit" type="submit" value="Submit">
+					</p>
+				</fieldset>
+			</form>
+		</div>
+
+		<div class="screen" id='loginScreen' style="display: none;" align="center">
+			</br>
+			</br>
+			<form action="/action_page.php" method="post">
+				<!-- <div class="imgcontainer">
+				  <img src="img_avatar2.png" alt="Avatar" class="avatar">
+				</div> -->
+			  
+				<div class="container">
+				  <label for="uname"><b>Username</b></label>
+				  <input type="text" placeholder="Enter Username" name="uname" required>
+			  
+				  <label for="psw"><b>Password</b></label>
+				  <input type="password" placeholder="Enter Password" name="psw" required>
+					  
+				  <button class="button" type="submit">Login</button>
+
+				</div>
+			  
+			  </form>
+		</div>
+
+	
 	</body>
 </html>
