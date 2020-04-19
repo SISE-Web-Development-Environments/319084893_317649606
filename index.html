@@ -3,6 +3,8 @@
 	<head>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
+		<script type="text/javascript" src="./screen.js"></script>
+		<script type="text/javascript" src="./jquery.validate.js"></script>
 		<link rel="stylesheet" href="styles.css">
 	</head>
 
@@ -34,7 +36,7 @@
 		</div>
 
 
-		<div class="screen" id='gameScreen' style="display: none;">
+		<div class="screen" id='gameScreen' style="display: none;" align="center">
 			<div id="score">
 				<label for="lblScore">SCORE:</label>
 				<input id="lblScore" type="text" />
@@ -51,9 +53,8 @@
 		<div class="screen" id='registerScreen' style="display: none;" align="center">
 		</br>
 		</br>
-			<form class="cmxform" id="signupForm" method="get" action="" novalidate="novalidate"> 
+			<form class="cmxform" id="signupForm" method="get" action="" align="left"> 
 				<fieldset>
-					<legend>Registration form</legend>
 					<p>
 						<label for="firstname">Firstname</label>
 						<input id="firstname" name="firstname" type="text">
@@ -79,7 +80,11 @@
 						<input id="email" name="email" type="email">
 					</p>
 					<p>
-						<input class="submit" type="submit" value="Submit">
+						<label for="birthday">Birthday:</label>
+  						<input type="date" id="birthday" name="birthday">
+					</p>
+					<p>
+						<button id="regSubmit" class="submit" type="submit">submit</button>
 					</p>
 				</fieldset>
 			</form>
@@ -88,19 +93,22 @@
 		<div class="screen" id='loginScreen' style="display: none;" align="center">
 			</br>
 			</br>
-			<form action="/action_page.php" method="post">
+			<form >
 				<!-- <div class="imgcontainer">
 				  <img src="img_avatar2.png" alt="Avatar" class="avatar">
 				</div> -->
 			  
 				<div class="container">
 				  <label for="uname"><b>Username</b></label>
-				  <input type="text" placeholder="Enter Username" name="uname" required>
-			  
+				  <input id="tryUsername" type="text" placeholder="Enter Username" name="uname" required>
+					</br>
+					</br>
 				  <label for="psw"><b>Password</b></label>
-				  <input type="password" placeholder="Enter Password" name="psw" required>
+				  <input id="tryPassword" type="password" placeholder="Enter Password" name="psw" required>
 					  
-				  <button class="button" type="submit">Login</button>
+				</br>
+				</br>
+				  <button id="loginSubmit" class="button" type="button">Login</button>
 
 				</div>
 			  

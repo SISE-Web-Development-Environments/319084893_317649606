@@ -11,37 +11,6 @@ $(document).ready(function() {
 	context = canvas.getContext("2d");
 	Start();
 
-	/*-----------------switch divs--------------------*/
-	$("#menureg,#signupButton").click(function(){
-		$("li").removeClass("active");
-		$("#menureg").addClass("active");
-		$(".screen").hide();
-		$("#registerScreen").show();
-		
-	
-	});
-
-	$("#menuwelcome").click(function(){
-		$("li").removeClass("active");
-		$("#menuwelcome").addClass("active");
-		$(".screen").hide();
-		$("#welcomeScreen").show();
-	
-	});
-
-	$("#menulogin,#loginButton").click(function(){
-		$("li").removeClass("active");
-		$("#menulogin").addClass("active");
-		$(".screen").hide();
-		$("#loginScreen").show();
-	
-	});
-
-	$("#menuabout").click(function(){
-		$("#myModal").show();
-	});
-	/*-----------------------------------------------------*/
-
 
 });
 
