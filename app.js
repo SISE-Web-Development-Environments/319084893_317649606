@@ -5,16 +5,23 @@ blinkyImage.src="blinky.png";
 var blinky=new Object();
 var board;
 var score;
+var lives;
 var pac_color;
 var start_time;
+var game_time;
 var time_elapsed;
-var interval;
+var intervalPac;
+var intervalMon;
 var lastKeyPressed=0;
 var startAngle=0.15 * Math.PI;
 var endAngle=1.85*Math.PI;
 var eyeStart=5;
 var eyeEnd=-15;
 var blinkyAte=0;
+var atCollision=false;
+
+var packmanSpeed=220;
+var monstersSpeed=360;
 
 
 $(document).ready(function() {
@@ -32,11 +39,14 @@ function startGame()
 function Start() {
 	board = new Array();
 	score = 0;
+	lives=5;
 	pac_color = "yellow";
 	var cnt = 100;
 	var food_remain = 50;
 	var pacman_remain = 1;
 	start_time = new Date();
+	game_time=10000;
+
 
 	// ------------------ create all objects on board-----------------------------
 
@@ -97,8 +107,8 @@ function Start() {
 		},
 		false
 	);
-	intervalPac = setInterval(UpdatePosition, 220);
-	intervalMons = setInterval(UpdateMonsterPosition, 350);
+	intervalPac = setInterval(UpdatePosition, packmanSpeed);
+	intervalMon = setInterval(UpdateMonsterPosition, monstersSpeed);
 }
 
 function findRandomEmptyCell(board) {
@@ -130,6 +140,7 @@ function Draw() {
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
+	lblLives.value=lives;
 	for (var i = 0; i < 10; i++) {
 		for (var j = 0; j < 10; j++) {
 			var center = new Object();
@@ -173,21 +184,27 @@ function UpdatePosition() {
 		score++;
 	}
 	board[shape.i][shape.j] = 2;
+
+	checkCollision();
+
+
+
+
 	var currentTime = new Date();
-	time_elapsed = (currentTime - start_time) / 1000;
+	time_elapsed = (game_time-(currentTime-start_time )) / 1000;
+	if(time_elapsed<=0||score==50)
+		endGame();
 	if (score >= 20 && time_elapsed <= 10) {
 		pac_color = "green";
 	}
-	if (score == 50) {
-		window.clearInterval(interval);
-		window.alert("Game completed");
-	} else {
+	else {
 		Draw();
 	}
  
 }
 
 function UpdateMonsterPosition(){
+
 
 	board[blinky.i][blinky.j] = blinkyAte;
 	moveMonster();
@@ -198,7 +215,11 @@ function UpdateMonsterPosition(){
 	blinkyAte = 0;
 
 	board[blinky.i][blinky.j] = 5;
+
+	checkCollision();
 	Draw();
+
+
 }
 
 function movePacman(){
@@ -293,4 +314,46 @@ function moveMonster(){
 
 	
 }
+
+function checkCollision(){
+	if(blinky.i==shape.i&&blinky.j==shape.j){
+		board[shape.i][shape.j]=0;
+		blinky.i=0;
+		blinky.j=0;
+		shape.i = Math.floor(Math.random() * 6 + 2);
+		shape.j = Math.floor(Math.random() * 6 + 2);
+		while (board[shape.i][shape.j]==4) {
+			shape.i = Math.floor(Math.random() * 6 + 2);
+			shape.j = Math.floor(Math.random() * 6 + 2);
+		}
+
+		board[blinky.i][blinky.j]=5;
+		board[shape.i][shape.j]=2;
+
+		if((--lives)==0){
+			endGame();
+		}
+	}
+
+}
+
+function endGame(){
+	if(lives==0){
+		alert("Loser!");
+	}
+	else if(time_elapsed<=0){
+		if(score<100)
+			alert("You are better than "+score+" points!");
+		else
+			alert("Winner!!!");
+	}
+	else if (score == 50) {
+		window.alert("Game completed");
+	}
+	window.clearInterval(intervalPac);
+	window.clearInterval(intervalMon);
+}
+
+
+
 
