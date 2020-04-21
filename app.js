@@ -1,16 +1,23 @@
 var context;
 var shape = new Object();
+var blinky=new Image();
+blinky.src="blinky.png";
 var board;
 var score;
 var pac_color;
 var start_time;
 var time_elapsed;
 var interval;
+var lastKeyPressed=0;
+var startAngle=0.15 * Math.PI;
+var endAngle=1.85*Math.PI;
+var eyeStart=5;
+var eyeEnd=-15;
+
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
 	Start();
-
 
 });
 
@@ -22,11 +29,17 @@ function Start() {
 	var food_remain = 50;
 	var pacman_remain = 1;
 	start_time = new Date();
+
+	// ------------------ create all objects on board-----------------------------
+
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
 		//put obstacles in (i=3,j=3) and (i=3,j=4) and (i=3,j=5), (i=6,j=1) and (i=6,j=2)
 		for (var j = 0; j < 10; j++) {
-			if (
+			if(i==0 && j==0){
+				board[i][j]=5;
+			}
+			else if (
 				(i == 3 && j == 3) ||
 				(i == 3 && j == 4) ||
 				(i == 3 && j == 5) ||
@@ -57,6 +70,8 @@ function Start() {
 		board[emptyCell[0]][emptyCell[1]] = 1;
 		food_remain--;
 	}
+	// ----------------------------------------------------------------------------------
+
 	keysDown = {};
 	addEventListener(
 		"keydown",
@@ -72,7 +87,7 @@ function Start() {
 		},
 		false
 	);
-	interval = setInterval(UpdatePosition, 250);
+	interval = setInterval(UpdatePosition, 220);
 }
 
 function findRandomEmptyCell(board) {
@@ -101,6 +116,8 @@ function GetKeyPressed() {
 }
 
 function Draw() {
+	// ctx.canvas.width  = screen.width;
+  	// ctx.canvas.height = screen.height;
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
@@ -111,24 +128,29 @@ function Draw() {
 			center.y = j * 60 + 30;
 			if (board[i][j] == 2) {
 				context.beginPath();
-				context.arc(center.x, center.y, 30, 0.15 * Math.PI, 1.85 * Math.PI); // half circle
+				context.arc(center.x, center.y, 30, startAngle, endAngle);
 				context.lineTo(center.x, center.y);
 				context.fillStyle = pac_color; //color
 				context.fill();
 				context.beginPath();
-				context.arc(center.x + 5, center.y - 15, 5, 0, 2 * Math.PI); // circle
+				context.arc(center.x + eyeStart, center.y +eyeEnd, 5, 0, 2 * Math.PI); // circle
 				context.fillStyle = "black"; //color
 				context.fill();
-			} else if (board[i][j] == 1) {
+			} 
+			else if (board[i][j] == 1) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
 				context.fillStyle = "black"; //color
 				context.fill();
-			} else if (board[i][j] == 4) {
+			} 
+			else if (board[i][j] == 4) {
 				context.beginPath();
 				context.rect(center.x - 30, center.y - 30, 60, 60);
 				context.fillStyle = "grey"; //color
 				context.fill();
+			}
+			else if (board[i][j] == 5) {
+				context.drawImage(blinky,i,j,canvas.width/10,canvas.height/10);
 			}
 		}
 	}
@@ -136,27 +158,8 @@ function Draw() {
 
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
-	var x = GetKeyPressed();
-	if (x == 1) {
-		if (shape.j > 0 && board[shape.i][shape.j - 1] != 4) {
-			shape.j--;
-		}
-	}
-	if (x == 2) {
-		if (shape.j < 9 && board[shape.i][shape.j + 1] != 4) {
-			shape.j++;
-		}
-	}
-	if (x == 3) {
-		if (shape.i > 0 && board[shape.i - 1][shape.j] != 4) {
-			shape.i--;
-		}
-	}
-	if (x == 4) {
-		if (shape.i < 9 && board[shape.i + 1][shape.j] != 4) {
-			shape.i++;
-		}
-	}
+	movePacman();
+	
 	if (board[shape.i][shape.j] == 1) {
 		score++;
 	}
@@ -170,23 +173,55 @@ function UpdatePosition() {
 		window.clearInterval(interval);
 		window.alert("Game completed");
 	} else {
-		Draw();
+		Draw(startAngle,endAngle);
 	}
 
-	// function myFunction() {
-	// 	var x = document.getElementById("registerScreen");
-	// 	if (x.style.display === "none") {
-	// 	  x.style.display = "block";
-	// 	}
-	// 	else {
-	// 	  x.style.display = "none";
-	// 	}
-	//   }
-
-	
-	
 
 	  
 }
 
+function movePacman()
+{
+	var x = GetKeyPressed();
+	if (x == 1) {
+		if (shape.j > 0 && board[shape.i][shape.j - 1] != 4) {
+			shape.j--;
+			startAngle=-0.35*Math.PI;
+			endAngle=1.35*Math.PI;
+			lastKeyPressed=x;
+			eyeStart=-15;
+			eyeEnd=-3;
+		}
+	}
+	if (x == 2) {
+		if (shape.j < 9 && board[shape.i][shape.j + 1] != 4) {
+			shape.j++;
+			startAngle=0.65 * Math.PI;
+			endAngle=2.35*Math.PI;
+			lastKeyPressed=x;
+			eyeStart=15;
+			eyeEnd=-5;
+		}
+	}
+	if (x == 3) {
+		if (shape.i > 0 && board[shape.i - 1][shape.j] != 4) {
+			shape.i--;
+			startAngle=1.15 * Math.PI;
+			endAngle=2.85*Math.PI;
+			lastKeyPressed=x;
+			eyeStart=5;
+			eyeEnd=-15;
+		}
+	}
+	if (x == 4) {
+		if (shape.i < 9 && board[shape.i + 1][shape.j] != 4) {
+			shape.i++;
+			startAngle=0.15 * Math.PI;
+			endAngle=1.85*Math.PI;
+			lastKeyPressed=x;
+			eyeStart=5;
+			eyeEnd=-15;
+		}
+	}
+}
 

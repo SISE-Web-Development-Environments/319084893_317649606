@@ -313,3 +313,11 @@ animation: eat 1s linear 0s infinite;
       1100px 65px 0 0 white;}
 }
 
+/*------------------------------------canvas-------------------------------------*/
+#canvas {
+
+  height: 500px;
+  width: 500px;
+  border: 1px solid black;
+}   
+
