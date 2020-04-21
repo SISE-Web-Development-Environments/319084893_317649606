@@ -1,7 +1,8 @@
 var context;
 var shape = new Object();
-var blinky=new Image();
-blinky.src="blinky.png";
+var blinkyImage=new Image();
+blinkyImage.src="blinky.png";
+var blinky=new Object();
 var board;
 var score;
 var pac_color;
@@ -13,13 +14,20 @@ var startAngle=0.15 * Math.PI;
 var endAngle=1.85*Math.PI;
 var eyeStart=5;
 var eyeEnd=-15;
+var blinkyAte=0;
 
 
 $(document).ready(function() {
-	context = canvas.getContext("2d");
-	Start();
+	// context = canvas.getContext("2d");
+	// Start();
 
 });
+
+function startGame()
+{
+	context = canvas.getContext("2d");
+	Start();
+}
 
 function Start() {
 	board = new Array();
@@ -38,6 +46,8 @@ function Start() {
 		for (var j = 0; j < 10; j++) {
 			if(i==0 && j==0){
 				board[i][j]=5;
+				blinky.i=i;
+				blinky.j=j;
 			}
 			else if (
 				(i == 3 && j == 3) ||
@@ -87,7 +97,8 @@ function Start() {
 		},
 		false
 	);
-	interval = setInterval(UpdatePosition, 220);
+	intervalPac = setInterval(UpdatePosition, 220);
+	intervalMons = setInterval(UpdateMonsterPosition, 350);
 }
 
 function findRandomEmptyCell(board) {
@@ -116,8 +127,6 @@ function GetKeyPressed() {
 }
 
 function Draw() {
-	// ctx.canvas.width  = screen.width;
-  	// ctx.canvas.height = screen.height;
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
@@ -139,7 +148,7 @@ function Draw() {
 			} 
 			else if (board[i][j] == 1) {
 				context.beginPath();
-				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
+				context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // circle
 				context.fillStyle = "black"; //color
 				context.fill();
 			} 
@@ -150,7 +159,7 @@ function Draw() {
 				context.fill();
 			}
 			else if (board[i][j] == 5) {
-				context.drawImage(blinky,i,j,canvas.width/10,canvas.height/10);
+				context.drawImage(blinkyImage,center.x-30,center.y-30,canvas.width/10,canvas.height/10);
 			}
 		}
 	}
@@ -173,15 +182,26 @@ function UpdatePosition() {
 		window.clearInterval(interval);
 		window.alert("Game completed");
 	} else {
-		Draw(startAngle,endAngle);
+		Draw();
 	}
-
-
-	  
+ 
 }
 
-function movePacman()
-{
+function UpdateMonsterPosition(){
+
+	board[blinky.i][blinky.j] = blinkyAte;
+	moveMonster();
+		
+	if(board[blinky.i][blinky.j]==1)
+		blinkyAte = 1;
+	else
+	blinkyAte = 0;
+
+	board[blinky.i][blinky.j] = 5;
+	Draw();
+}
+
+function movePacman(){
 	var x = GetKeyPressed();
 	if (x == 1) {
 		if (shape.j > 0 && board[shape.i][shape.j - 1] != 4) {
@@ -223,5 +243,54 @@ function movePacman()
 			eyeEnd=-15;
 		}
 	}
+}
+
+function moveMonster(){
+	let action;
+	var rnd = Math.random();
+	// 1 - down
+	// 2 - up
+	// 3 - right
+	// 4 - left
+	let options=[];
+	if(blinky.i>shape.i)
+		options.push(1);
+	if(blinky.i<shape.i)
+		options.push(2);
+	if(blinky.j<shape.j)
+		options.push(3);
+	if(blinky.j>shape.j)
+		options.push(4);
+	let length=options.length;
+
+	if(length==1)
+	{
+		if(rnd>0.2)
+			action=options[0];
+		else
+			action=Math.floor(Math.random() * 4 + 1);
+
+	}
+	else
+	{
+		if(rnd<=0.46)
+			action=options[0];
+		else if(rnd>0.46&&rnd<=0.92)
+			action=options[1];
+		else 
+			action=Math.floor(Math.random() * 4 + 1);
+
+	}
+
+	if(action==1 && board[blinky.i-1][blinky.j] != 4)
+		blinky.i--;
+	else if(action==2  && board[blinky.i+1][blinky.j] != 4)
+		blinky.i++;
+	else if(action==3 && board[blinky.i][blinky.j + 1] != 4)
+		blinky.j++;	
+	else if(action==4 && board[blinky.i][blinky.j - 1] != 4)
+		blinky.j--;
+
+	
 }
 
