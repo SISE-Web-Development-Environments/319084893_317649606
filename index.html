@@ -120,6 +120,48 @@
 			  </form>
 		</div>
 
+		<div class="screen" id='optionsScreen' style="display: none;" align="center">
+			</br>
+			</br>
+			<form class="cmxform" id="optionsForm" method="get" action="" align="left">
+				<fieldset>
+					<p>
+						<label for="ballNum">Number of balls:</label>
+						<input type="range" name="ballNum" id="ballNum" value="50" min="50" max="90" oninput="ballNum_disp.value = ballNum.value">
+						<output  id="ballNum_disp">50</output>
+					</p>
+					<p>
+						<label for="ball25">25 point balls:</label>
+						<input type="color" id="ball25" name="ball25" value="#00FF00">
+					</p>
+					<p>
+						<label for="ball15">15 point balls:</label>
+						<input type="color" id="ball15" name="ball15" value="#ff0000">
+					</p>
+					<p>
+						<label for="ball5">5 point balls:</label>
+						<input type="color" id="ball5" name="ball5" value="#000000">
+					</p>
+					<p>
+						<label for="duration">Duration:</label>
+						<input id="duration" name="duration" type="text" width="100" value="80">
+					</p>
+					<p>
+						<label for="monsterNum">Number of monsters:</label>
+						<input type="range" name="monsterNum" id="monsterNum" value="1" min="1" max="4" oninput="monsterNum_disp.value = monsterNum.value">
+						<output  id="monsterNum_disp">1</output>
+					</p>
+
+					<p>
+						<button id="randomChoise">random</button>
+					</p>
+					<p>
+						<button id="optionsSubmit" class="submit" type="submit">submit</button>
+					</p>
+				</fieldset>
+			</form>
+		</div>
+
 	
 	</body>
 </html>
