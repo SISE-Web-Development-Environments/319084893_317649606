@@ -49,7 +49,6 @@
 				<input id="lblLives" type="label" />
 <!--			</div>-->
 			<div id="game">
-				<script></script>
 				</br>
 				<canvas id="canvas" height="600" width="600"></canvas>
 			</div>
@@ -125,6 +124,10 @@
 			</br>
 			<form class="cmxform" id="optionsForm" method="get" action="" align="left">
 				<fieldset>
+					<!-- <p>
+						<label for="upKey">UP key:</label>
+						<input type="text" id="upKey" name="upKey" onkeypress="handleKeys(e)">
+					</p> -->
 					<p>
 						<label for="ballNum">Number of balls:</label>
 						<input type="range" name="ballNum" id="ballNum" value="50" min="50" max="90" oninput="ballNum_disp.value = ballNum.value">
@@ -144,7 +147,9 @@
 					</p>
 					<p>
 						<label for="duration">Duration:</label>
-						<input id="duration" name="duration" type="text" width="100" value="80">
+						<input id="duration" name="duration" type="text" size="4" value="80">
+						<button id="optionsSubmit" class="button" type="submit"  style="margin-left:40%;">Play Game</button>
+
 					</p>
 					<p>
 						<label for="monsterNum">Number of monsters:</label>
@@ -154,9 +159,6 @@
 
 					<p>
 						<button id="randomChoise">random</button>
-					</p>
-					<p>
-						<button id="optionsSubmit" class="submit" type="submit">submit</button>
 					</p>
 				</fieldset>
 			</form>

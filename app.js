@@ -1,18 +1,23 @@
 var context;
 var shape = new Object();
+var gameDuration;
+var numOfBalls;
 
 //region Monsters
 var blinkyImage=new Image();
 blinkyImage.src="blinky.png";
 var blinky=new Object();
-
-var inkyImage=new Image();
-inkyImage.src="inky.jpg";
+var inkyImage;
 var inky=new Object();
-
-var pinkyImage=new Image();
-pinkyImage.src="clyde.jpg";
+var pinkyImage;
 var pinky=new Object();
+// var inkyImage=new Image();
+// inkyImage.src="inky.jpg";
+// var inky=new Object();
+
+// var pinkyImage=new Image();
+// pinkyImage.src="clyde.jpg";
+// var pinky=new Object();
 //endregion
 
 //region Fields
@@ -37,30 +42,89 @@ var numOfMons=3;
 var packmanSpeed=220;
 var monstersSpeed=360;
 //endregion
-
+var maxPoints;
 var bigBall=new Object();
 var mediumBall=new Object();
 var smallBall=new Object();
 bigBall.code=1;
 mediumBall.code=9;
 smallBall.code=10;
-bigBall.color="#00FF00";
-mediumBall.color="#ff0000";
-smallBall.color="#000000";
-bigBall.amount=50*0.1;
-mediumBall.amount=50*0.3;
-smallBall.amount=50*0.6;
-var maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
+// bigBall.color="#00FF00";
+// mediumBall.color="#ff0000";
+// smallBall.color="#000000";
+// bigBall.amount=50*0.1;
+// mediumBall.amount=50*0.3;
+// smallBall.amount=50*0.6;
+// var maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
 
 
 var boardI=10;
 var boardJ=10;
 
 $(document).ready(function() {
-	// context = canvas.getContext("2d");
-	// Start();
+	$("#optionsForm").validate({
+		rules: {
+			duration:{
+				goodTime:true
+			}
+		}
+	});
+	jQuery.validator.addMethod("goodTime", function(value) {
+        return (value>=60);
+	  }, "please choose a number higher than 60");
+	  
+	$("#optionsSubmit").click(function(e)
+    {
+        e.preventDefault();
+		if($('#optionsForm').valid() == true)
+		{
+			numOfBalls=document.getElementById("ballNum").value;
+			numOfMons=document.getElementById("monsterNum").value;
+			bigBall.color=document.getElementById("ball25").value;
+			mediumBall.color=document.getElementById("ball15").value;
+			smallBall.color=document.getElementById("ball5").value;
+			gameDuration=document.getElementById("duration").value;
+
+			bigBall.amount=numOfBalls*0.1;
+			mediumBall.amount=numOfBalls*0.3;
+			smallBall.amount=numOfBalls*0.6;
+			maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
+
+			if(numOfMons>1)
+			{
+				inkyImage=new Image();
+				inkyImage.src="inky.jpg";
+				// inky=new Object();
+			}
+			if(numOfMons>2)
+			{
+				pinkyImage=new Image();
+				pinkyImage.src="clyde.jpg";
+				// pinky=new Object();	
+			}
+
+			$(".screen").hide();
+			$("#gameScreen").show();
+            startGame();
+		}
+	});
+
+	$("#randomChoise").click(function(e){
+		e.preventDefault();
+		ballNum.value=Math.floor(Math.random() * Math.floor(90)+50);
+		monsterNum.value=Math.floor(Math.random() * Math.floor(4)+1);
+		ballNum_disp.value=ballNum.value;
+		monsterNum_disp.value=monsterNum.value;
+		ball25.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+		ball15.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+		ball5.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+		duration.value=Math.floor(Math.random() * Math.floor(50)+60);
+
+	});
 
 });
+
+
 
 function startGame()
 {
@@ -92,12 +156,20 @@ function Start() {
 	board[0][0]=5;
 	blinky.i=0;
 	blinky.j=0;
-	board[0][boardJ-1]=6;
-	inky.i=0;
-	inky.j=boardJ-1;
-	board[boardI-1][0]=7;
-	pinky.i=boardI-1;
-	pinky.j=0;
+	
+	if(numOfMons>1)
+	{
+		board[0][boardJ-1]=6;
+		inky.i=0;
+		inky.j=boardJ-1;
+	}
+	if(numOfMons>2)
+	{
+		board[boardI-1][0]=7;
+		pinky.i=boardI-1;
+		pinky.j=0;
+	}
+	
 
 	//insert walls
 
@@ -514,6 +586,13 @@ function chooseWho(){
 		UpdateMonsterPosition(inky,"Inky",6);
 	else if(flag==2)
 		UpdateMonsterPosition(pinky,"Plinky",7);;
+}
+
+
+function handleKeys(e)
+{
+	e.preventDefault();
+	document.getElementById("upKey").value =e.keyCode;
 }
 
 

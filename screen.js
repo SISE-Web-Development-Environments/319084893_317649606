@@ -35,8 +35,8 @@ $(document).ready(function() {
         if(validateUser(document.getElementById("tryUsername").value,document.getElementById("tryPassword").value))
         {
             $(".screen").hide();
-            $("#gameScreen").show();
-            startGame();
+            $("#optionsScreen").show();
+            // startGame();
         }
         else
         {
