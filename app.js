@@ -2,6 +2,11 @@ var context;
 var shape = new Object();
 var gameDuration;
 var numOfBalls;
+var numOfMons;
+var upKey;
+var downKey;
+var rightKey;
+var leftKey;
 
 //region Monsters
 var blinkyImage=new Image();
@@ -52,7 +57,6 @@ var inkyAte=0;
 var pinkyAte=0;
 var clydeAte=0;
 var starAte=0;
-var numOfMons;
 var packmanSpeed=150;
 var monstersSpeed=280;
 var snailSpeed=4000;
@@ -109,6 +113,10 @@ $(document).ready(function() {
 			mediumBall.color=document.getElementById("ball15").value;
 			smallBall.color=document.getElementById("ball5").value;
 			gameDuration=document.getElementById("duration").value;
+			upKey=document.getElementById("upKeyIn_disp").value;
+			downKey=document.getElementById("downKeyIn_disp").value;
+			rightKey=document.getElementById("rightKeyIn_disp").value;
+			leftKey=document.getElementById("leftKeyIn_disp").value;
 
 			bigBall.amount=numOfBalls*0.1;
 			mediumBall.amount=numOfBalls*0.3;
@@ -132,7 +140,54 @@ $(document).ready(function() {
 		ball15.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
 		ball5.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
 		duration.value=Math.floor(Math.random() * Math.floor(50)+60);
+		side_balls.value=ballNum.value;
+		side_monsters.value=monsterNum.value;
+		side_ball25.value=ball25.value;
+		side_ball15.value=ball15.value;
+		side_ball5.value=ball5.value;
+		side_duration.value=duration.value;
+		upKeyIn_disp.value=38; upKeyIn.value='';
+		downKeyIn_disp.value=40; downKeyIn.value='';
+		rightKeyIn_disp.value=39; rightKeyIn.value='';
+		leftKeyIn_disp.value=37; leftKeyIn.value='';
 
+	});
+
+	$("#restartBut").click(function(){
+		window.clearInterval(intervalPac);
+		window.clearInterval(intervalMon);
+		window.clearInterval(intervalSnail);
+		if (confirm("Are you sure you want to restart the game?")) 
+		{
+			bigBall.amount=numOfBalls*0.1;
+			mediumBall.amount=numOfBalls*0.3;
+			smallBall.amount=numOfBalls*0.6;
+			maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
+			Start();
+		} 
+		else 
+		{
+			intervalPac = setInterval(UpdatePosition, packmanSpeed);
+			intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
+			intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
+		}
+	});
+
+	$("#newGameBut").click(function(){
+		window.clearInterval(intervalPac);
+		window.clearInterval(intervalMon);
+		window.clearInterval(intervalSnail);
+		if (confirm("Are you sure you want to start a new game?")) 
+		{
+			$(".screen").hide();
+			$("#optionsScreen").show();
+		} 
+		else 
+		{
+			intervalPac = setInterval(UpdatePosition, packmanSpeed);
+			intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
+			intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
+		}
 	});
 
 });
@@ -147,6 +202,7 @@ function startGame()
 }
 
 function Start() {
+	showUser.value="Hello, "+document.getElementById("tryUsername").value;;
 	board = new Array();
 	score = 0;
 	lives=70;
@@ -293,16 +349,16 @@ function findRandomEmptyCell(board)
 }
 
 function GetKeyPressed() {
-	if (keysDown[38]) {
+	if (keysDown[upKey]) {
 		return 1;
 	}
-	if (keysDown[40]) {
+	if (keysDown[downKey]) {
 		return 2;
 	}
-	if (keysDown[37]) {
+	if (keysDown[leftKey]) {
 		return 3;
 	}
-	if (keysDown[39]) {
+	if (keysDown[rightKey]) {
 		return 4;
 	}
 }
@@ -760,6 +816,7 @@ function endGame(){
 	window.clearInterval(intervalPac);
 	window.clearInterval(intervalMon);
 	window.clearInterval(intervalSnail);
+
 }
 
 function returnEatenCandy(MovingEntity,Name){

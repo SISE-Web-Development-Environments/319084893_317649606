@@ -1,169 +1,220 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<script src="./jquery-3.4.1.slim.min.js"></script>
-		<script type="text/javascript" src="./app.js"></script>
-		<script type="text/javascript" src="./screen.js"></script>
-		<script type="text/javascript" src="./jquery.validate.js"></script>
-		<link rel="stylesheet" href="styles.css">
-	</head>
 
-	<body>
-		<div class="pacman">
-			<div class="pacman-top"></div>
-			<div class="pacman-bottom"></div>
-			<div class="feed"></div>
-		</div>
+<head>
+	<script src="./jquery-3.4.1.slim.min.js"></script>
+	<script type="text/javascript" src="./app.js"></script>
+	<script type="text/javascript" src="./screen.js"></script>
+	<script type="text/javascript" src="./jquery.validate.js"></script>
+	<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+	<div class="pacman">
+		<div class="pacman-top"></div>
+		<div class="pacman-bottom"></div>
+		<div class="feed"></div>
+	</div>
+	</br>
+	</br>
+
+	<divmenu id='cssmenu' align="center">
+		<ul>
+			<li class='active' id="menuwelcome"><a href='#'>Welcome</a></li>
+			<li id="menureg"><a href='#'>Register</a></li>
+			<li id="menulogin"><a href='#'>Log in</a></li>
+			<li id="menuabout"><a href='#'>About</a></li>
+		</ul>
+	</divmenu>
+
+	<div class="screen" id='welcomeScreen' align="center">
 		</br>
 		</br>
+		<input type=button class="button" id="loginButton" value="Log in">
+		</br>
+		</br>
+		<input type=button class="button" id="signupButton" value="Sign up">
+	</div>
 
-		<divmenu id='cssmenu' align="center">
-			<ul>
-			   <li class='active' id="menuwelcome"><a href='#'>Welcome</a></li>
-			   <li id="menureg"><a href='#'>Register</a></li>
-			   <li id="menulogin"><a href='#'>Log in</a></li>
-			   <li id="menuabout"><a href='#'>About</a></li>
-			</ul>
-		</divmenu>
 
-		<div class="screen" id='welcomeScreen' align="center">
+	<div class="screen" id='gameScreen' style="display: none;" align="center">
+		<label for="lblScore">SCORE:</label>
+		<input id="lblScore" type="label" />
+		<label for="lblTime">TIME:</label>
+		<input id="lblTime" type="label" />
+
+		<label for="lblLives">LIVES:</label>
+		<input id="lblLives" type="label" />
+		<div id="game" class="wrapper">
 			</br>
-			</br>
-			<input type=button class="button" id="loginButton" value="Log in">
-			</br>
-			</br>
-			<input type=button class="button" id="signupButton" value="Sign up">
-		</div>
+			<canvas id="canvas" height="600" width="600"></canvas>
 
-
-		<div class="screen" id='gameScreen' style="display: none;" align="center">
-<!--			<div id="score">-->
-				<label for="lblScore">SCORE:</label>
-				<input id="lblScore" type="label" />
-<!--			</div>-->
-<!--			<div id="time">-->
-				<label for="lblTime">TIME:</label>
-				<input id="lblTime" type="label" />
-
-				<label for="lblLives">LIVES:</label>
-				<input id="lblLives" type="label" />
-<!--			</div>-->
-			<div id="game">
+			<div class="bla" style="position: absolute; top:0; left:0; margin-left: 15%; margin-top: 10%;">
+				<output style="font-size:32px;" id="showUser"></br>
+			</div>
+			
+			<div class="restarts" style="position: absolute; top:0; left:0; margin-left: 15%; margin-top: 15%;">
+				<button type="button" class="button" id="restartBut">Restart</button>
 				</br>
-				<canvas id="canvas" height="600" width="600"></canvas>
+				</br>
+				<button type="button" class="button" id="newGameBut">New Game</button>
+			</div>
+
+
+			<div class="controls" style="position: absolute; top:0; left:0; margin-left: 80%; margin-top: 16%;">
+				<fieldset>
+					<label><u>Game Settings:</u></label></br></br>
+					<label for="side_upKey">Up Key:</label>
+					<output id="side_upKey">38</output></br>
+					<label for="side_downKey">Down Key:</label>
+					<output id="side_downKey">40</output></br>
+					<label for="side_righyKey">Right Key:</label>
+					<output id="side_righyKey">39</output></br>
+					<label for="side_leftKey">Left Key:</label>
+					<output id="side_leftKey">37</output></br>
+					<label for="side_balls">Number of balls:</label>
+					<output id="side_balls">50</output></br>
+					<label for="side_ball25">Color of ball25:</label>
+					<output id="side_ball25">#00FF00</output></br>
+					<label for="side_ball15">Color of ball15:</label>
+					<output id="side_ball15">#ff0000</output></br>
+					<label for="side_ball5">Color of ball5:</label>
+					<output id="side_ball5">000000</output></br>
+					<label for="side_duration">Game duration:</label>
+					<output id="side_duration">80</output></br>
+					<label for="side_monsters">Number of monsters:</label>
+					<output id="side_monsters">1</output>
+				</fieldset>
 			</div>
 		</div>
+	</div>
 
-		<div class="screen" id='registerScreen' style="display: none;" align="center">
+	<div class="screen" id='registerScreen' style="display: none;" align="center">
 		</br>
 		</br>
-			<form class="cmxform" id="signupForm" method="get" action="" align="left"> 
-				<fieldset>
-					<p>
-						<label for="firstname">Firstname</label>
-						<input id="firstname" name="firstname" type="text">
-					</p>
-					<p>
-						<label for="lastname">Lastname</label>
-						<input id="lastname" name="lastname" type="text">
-					</p>
-					<p>
-						<label for="username">Username</label>
-						<input id="username" name="username" type="text">
-					</p>
-					<p>
-						<label for="password">Password</label>
-						<input id="password" name="password" type="password" aria-autocomplete="list">
-					</p>
-					<p>
-						<label for="confirm_password">Confirm password</label>
-						<input id="confirm_password" name="confirm_password" type="password">
-					</p>
-					<p>
-						<label for="email">Email</label>
-						<input id="email" name="email" type="email">
-					</p>
-					<p>
-						<label for="birthday">Birthday:</label>
-  						<input type="date" id="birthday" name="birthday">
-					</p>
-					<p>
-						<button id="regSubmit" class="submit" type="submit">submit</button>
-					</p>
-				</fieldset>
-			</form>
-		</div>
+		<form class="cmxform" id="signupForm" method="get" action="" align="left">
+			<fieldset>
+				<p>
+					<label for="firstname">Firstname</label>
+					<input id="firstname" name="firstname" type="text">
+				</p>
+				<p>
+					<label for="lastname">Lastname</label>
+					<input id="lastname" name="lastname" type="text">
+				</p>
+				<p>
+					<label for="username">Username</label>
+					<input id="username" name="username" type="text">
+				</p>
+				<p>
+					<label for="password">Password</label>
+					<input id="password" name="password" type="password" aria-autocomplete="list">
+				</p>
+				<p>
+					<label for="confirm_password">Confirm password</label>
+					<input id="confirm_password" name="confirm_password" type="password">
+				</p>
+				<p>
+					<label for="email">Email</label>
+					<input id="email" name="email" type="email">
+				</p>
+				<p>
+					<label for="birthday">Birthday:</label>
+					<input type="date" id="birthday" name="birthday">
+				</p>
+				<p>
+					<button id="regSubmit" class="submit" type="submit">submit</button>
+				</p>
+			</fieldset>
+		</form>
+	</div>
 
-		<div class="screen" id='loginScreen' style="display: none;" align="center">
-			</br>
-			</br>
-			<form >
-				<!-- <div class="imgcontainer">
+	<div class="screen" id='loginScreen' style="display: none;" align="center">
+		</br>
+		</br>
+		<form>
+			<!-- <div class="imgcontainer">
 				  <img src="img_avatar2.png" alt="Avatar" class="avatar">
 				</div> -->
-			  
-				<div class="container">
-				  <label for="uname"><b>Username</b></label>
-				  <input id="tryUsername" type="text" placeholder="Enter Username" name="uname" required>
-					</br>
-					</br>
-				  <label for="psw"><b>Password</b></label>
-				  <input id="tryPassword" type="password" placeholder="Enter Password" name="psw" required>
-					  
+
+			<div class="container">
+				<label for="uname"><b>Username</b></label>
+				<input id="tryUsername" type="text" placeholder="Enter Username" name="uname" required>
 				</br>
 				</br>
-				  <button id="loginSubmit" class="button" type="button">Login</button>
+				<label for="psw"><b>Password</b></label>
+				<input id="tryPassword" type="password" placeholder="Enter Password" name="psw" required>
 
-				</div>
-			  
-			  </form>
-		</div>
+				</br>
+				</br>
+				<button id="loginSubmit" class="button" type="button">Login</button>
 
-		<div class="screen" id='optionsScreen' style="display: none;" align="center">
-			</br>
-			</br>
-			<form class="cmxform" id="optionsForm" method="get" action="" align="left">
-				<fieldset>
-					<!-- <p>
-						<label for="upKey">UP key:</label>
-						<input type="text" id="upKey" name="upKey" onkeypress="handleKeys(e)">
-					</p> -->
-					<p>
-						<label for="ballNum">Number of balls:</label>
-						<input type="range" name="ballNum" id="ballNum" value="50" min="50" max="90" oninput="ballNum_disp.value = ballNum.value">
-						<output  id="ballNum_disp">50</output>
-					</p>
-					<p>
-						<label for="ball25">25 point balls:</label>
-						<input type="color" id="ball25" name="ball25" value="#00FF00">
-					</p>
-					<p>
-						<label for="ball15">15 point balls:</label>
-						<input type="color" id="ball15" name="ball15" value="#ff0000">
-					</p>
-					<p>
-						<label for="ball5">5 point balls:</label>
-						<input type="color" id="ball5" name="ball5" value="#000000">
-					</p>
-					<p>
-						<label for="duration">Duration:</label>
-						<input id="duration" name="duration" type="text" size="4" value="80">
-						<button id="optionsSubmit" class="button" type="submit"  style="margin-left:40%;">Play Game</button>
+			</div>
 
-					</p>
-					<p>
-						<label for="monsterNum">Number of monsters:</label>
-						<input type="range" name="monsterNum" id="monsterNum" value="1" min="1" max="4" oninput="monsterNum_disp.value = monsterNum.value">
-						<output  id="monsterNum_disp">1</output>
-					</p>
+		</form>
+	</div>
 
-					<p>
-						<button id="randomChoise">random</button>
-					</p>
-				</fieldset>
-			</form>
-		</div>
+	<div class="screen" id='optionsScreen' style="display: none;" align="center">
+		</br>
+		<form class="cmxform" id="optionsForm" method="get" action="" align="left">
+			<fieldset>
+				<p>
+					<label for="upKeyIn">UpKey:</label>
+					<input id="upKeyIn" name="upKeyIn" type="text" size="3" onkeydown="upKeyIn.value='';upKeyIn_disp.value=event.keyCode; side_upKey.value=event.keyCode">
+					<output id="upKeyIn_disp" >38</output>
+				</p>
+				<p>
+					<label for="downKeyIn">DownKey:</label>
+					<input id="downKeyIn" name="downKeyIn" type="text" size="3" onkeydown="downKeyIn.value='';downKeyIn_disp.value=event.keyCode; side_downKey.value=event.keyCode">
+					<output id="downKeyIn_disp" >40</output>
+				</p>
+				<p>
+					<label for="rightKeyIn">RigthKey:</label>
+					<input id="rightKeyIn" name="rightKeyIn" type="text" size="3" onkeydown="rightKeyIn.value='';rightKeyIn_disp.value=event.keyCode; side_rightKey.value=event.keyCode">
+					<output id="rightKeyIn_disp" >39</output>
+				</p>
+				<p>
+					<label for="leftKeyIn">LeftKey:</label>
+					<input id="leftKeyIn" name="leftKeyIn" type="text" size="3" onkeydown="leftKeyIn.value='';leftKeyIn_disp.value=event.keyCode; side_leftKey.value=event.keyCode">
+					<output id="leftKeyIn_disp" >37</output>
+				</p>
+				<p>
+					<label for="ballNum">Number of balls:</label>
+					<input type="range" name="ballNum" id="ballNum" value="50" min="50" max="90" oninput="ballNum_disp.value = ballNum.value; side_balls.value=ballNum.value;">
+					<output id="ballNum_disp">50</output>
+				</p>
+				<p>
+					<label for="ball25">25 point balls:</label>
+					<input type="color" id="ball25" name="ball25" value="#00FF00" oninput="side_ball25.value = ball25.value">
+				</p>
+				<p>
+					<label for="ball15">15 point balls:</label>
+					<input type="color" id="ball15" name="ball15" value="#ff0000" oninput="side_ball15.value = ball15.value">
+				</p>
+				<p>
+					<label for="ball5">5 point balls:</label>
+					<input type="color" id="ball5" name="ball5" value="#000000" oninput="side_ball5.value = ball5.value">
+				</p>
+				<p>
+					<label for="duration">Duration:</label>
+					<input id="duration" name="duration" type="text" size="4" value="80" oninput="side_duration.value = duration.value">
+					<button id="optionsSubmit" class="button" type="submit" style="position: absolute;margin-left:6%;">Play Game</button>
 
-	
-	</body>
+				</p>
+				<p>
+					<label for="monsterNum">Number of monsters:</label>
+					<input type="range" name="monsterNum" id="monsterNum" value="1" min="1" max="4" oninput="monsterNum_disp.value = monsterNum.value; side_monsters.value=monsterNum.value">
+					<output id="monsterNum_disp">1</output>
+				</p>
+
+				<p>
+					<button id="randomChoise">random</button>
+				</p>
+			</fieldset>
+		</form>
+	</div>
+
+
+</body>
+
 </html>
