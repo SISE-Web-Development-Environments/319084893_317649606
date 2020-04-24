@@ -24,6 +24,10 @@ var starImage=new Image();
 starImage.src="star.png";
 var star=new Object();
 
+var snailImage=new Image();
+snailImage.src="snail.png";
+var snail=new Object();
+
 
 //endregion
 
@@ -37,6 +41,7 @@ var game_time;
 var time_elapsed;
 var intervalPac;
 var intervalMon;
+var intervalSnail;
 var lastKeyPressed=0;
 var startAngle=0.15 * Math.PI;
 var endAngle=1.85*Math.PI;
@@ -50,6 +55,7 @@ var starAte=0;
 var numOfMons;
 var packmanSpeed=150;
 var monstersSpeed=280;
+var snailSpeed=4000;
 //endregion
 var maxPoints;
 var bigBall=new Object();
@@ -59,7 +65,13 @@ bigBall.code=1;
 mediumBall.code=9;
 smallBall.code=10;
 star.code=11;
+snail.code=12;
 var starEaten=false;
+var snailEaten=false;
+var candiesCounter=(smallBall.amount+mediumBall.amount+bigBall.amount);
+var lastHundreadExcceded=100;
+
+var godModeOn=false;
 // bigBall.color="#00FF00";
 // mediumBall.color="#ff0000";
 // smallBall.color="#000000";
@@ -238,6 +250,12 @@ function Start() {
 	board[emptyCell[0]][emptyCell[1]]=star.code;
 	star.i=emptyCell[0];
 	star.j=emptyCell[1];
+
+	//insert snail
+	emptyCell=findRandomEmptyCell(board);
+	board[emptyCell[0]][emptyCell[1]]=snail.code;
+	snail.i=emptyCell[0];
+	snail.j=emptyCell[1];
 	// ----------------------------------------------------------------------------------
 
 	keysDown = {};
@@ -257,7 +275,8 @@ function Start() {
 	);
 
 	intervalPac = setInterval(UpdatePosition, packmanSpeed);
-	intervalMon = setInterval(UpdateMonsterPosition, monstersSpeed);
+	intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
+	intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
 
 }
 
@@ -348,6 +367,9 @@ function Draw() {
 			else if (board[i][j] == 8) {
 				context.drawImage(clydeImage, center.x - 30, center.y - 30, canvas.width / boardJ, canvas.height / boardI);
 			}
+			else if (board[i][j] == snail.code) {
+				context.drawImage(snailImage, center.x - 30, center.y - 30, canvas.width / boardJ, canvas.height / boardI);
+			}
 		}
 	}
 
@@ -359,30 +381,42 @@ function UpdatePosition() {
 
 	if (board[shape.i][shape.j] == smallBall.code) {
 		score += 5;
+		candiesCounter--;
 	} else if (board[shape.i][shape.j] == mediumBall.code) {
 		score += 15;
+		candiesCounter--;
 	} else if (board[shape.i][shape.j] == bigBall.code) {
 		score += 25;
+		candiesCounter--;
+	}
+	else if(board[shape.i][shape.j] == snail.code){
+		snailEaten=true;
+		window.clearInterval(intervalMon);
+		intervalMon=setInterval(UpdateMonsterAndStarPosition,monstersSpeed*6);
+		setTimeout(function () {window.clearInterval(intervalMon);
+			intervalMon=setInterval(UpdateMonsterAndStarPosition,monstersSpeed);},10000);
 	}
 	board[shape.i][shape.j] = 2;
+
+	enterGodMode();
 
 	checkCollision();
 
 
 	var currentTime = new Date();
 	time_elapsed = (game_time - (currentTime - start_time)) / 1000;
-	if (time_elapsed <= 0 || score == maxPoints)
+	if (time_elapsed <= 0 || score == maxPoints||candiesCounter==0)
 		endGame();
-	if (score >= 20 && time_elapsed <= 10) {
-		pac_color = "green";
-	} else {
-		Draw();
-	}
+	// if (score >= 20 && time_elapsed <= 10) {
+	// 	pac_color = "green";
+	// } else {
+	// }
+	Draw();
 
  
 }
 
-function UpdateMonsterPosition(){
+function UpdateMonsterAndStarPosition(){
 
 	for(var i=0;i<numOfMons;i++){
 		if(i==0)
@@ -403,6 +437,20 @@ function UpdateMonsterPosition(){
 
 
 
+}
+
+function UpdateSnailPosition(){
+	if (!snailEaten) {
+		var emptyCell = findRandomEmptyCell(board);
+		board[snail.i][snail.j]=0;
+		snail.i = emptyCell[0];
+		snail.j = emptyCell[1];
+		board[emptyCell[0]][emptyCell[1]] = snail.code;
+		Draw();
+	}
+	else {
+		window.clearInterval(intervalSnail);
+	}
 }
 
 function movePacman(){
@@ -521,57 +569,61 @@ function moveMonster(MonsterName){
 		Monster.j--;
 
 	if(MonsterName=="blinky"){
-		if (board[blinky.i][blinky.j] == smallBall.code)
-			blinkyAte = smallBall.code;
-		else if (board[blinky.i][blinky.j] == mediumBall.code)
-			blinkyAte = mediumBall.code;
-		else if (board[blinky.i][blinky.j] == bigBall.code)
-			blinkyAte = bigBall.code;
-		// else if (board[blinky.i][blinky.j] == star.code)
-		// 	blinkyAte = star.code;
-		else
-			blinkyAte = 0;
+		// if (board[blinky.i][blinky.j] == smallBall.code)
+		// 	blinkyAte = smallBall.code;
+		// else if (board[blinky.i][blinky.j] == mediumBall.code)
+		// 	blinkyAte = mediumBall.code;
+		// else if (board[blinky.i][blinky.j] == bigBall.code)
+		// 	blinkyAte = bigBall.code;
+		// else if (board[blinky.i][blinky.j] == snail.code)
+		// 	blinkyAte = snail.code;
+		// else
+		// 	blinkyAte = 0;
+		returnEatenCandy(blinky,"blinky");
 		board[blinky.i][blinky.j] = 5;
 	}
 	else if(MonsterName=="inky"){
-		if (board[inky.i][inky.j] == smallBall.code)
-			inkyAte = smallBall.code;
-		else if (board[inky.i][inky.j] == mediumBall.code)
-			inkyAte = mediumBall.code;
-		else if (board[inky.i][inky.j] == bigBall.code)
-			inkyAte = bigBall.code;
-		// else if (board[inky.i][inky.j] == star.code)
-		// 	inkyAte = star.code;
-		else
-			inkyAte = 0;
+		// if (board[inky.i][inky.j] == smallBall.code)
+		// 	inkyAte = smallBall.code;
+		// else if (board[inky.i][inky.j] == mediumBall.code)
+		// 	inkyAte = mediumBall.code;
+		// else if (board[inky.i][inky.j] == bigBall.code)
+		// 	inkyAte = bigBall.code;
+		// else if (board[inky.i][inky.j] == snail.code)
+		// 	inkyAte = snail.code;
+		// else
+		// 	inkyAte = 0;
+		returnEatenCandy(inky,"inky");
 		board[inky.i][inky.j] = 6;
 	}
 
 	else if(MonsterName=="pinky"){
-		if (board[pinky.i][pinky.j] == smallBall.code)
-			pinkyAte = smallBall.code;
-		else if (board[pinky.i][pinky.j] == mediumBall.code)
-			pinkyAte = mediumBall.code;
-		else if (board[pinky.i][pinky.j] == bigBall.code)
-			pinkyAte = bigBall.code;
-		// else if (board[pinky.i][pinky.j] == star.code)
-		// 	pinkyAte = star.code;
-		else
-			pinkyAte = 0;
+		// if (board[pinky.i][pinky.j] == smallBall.code)
+		// 	pinkyAte = smallBall.code;
+		// else if (board[pinky.i][pinky.j] == mediumBall.code)
+		// 	pinkyAte = mediumBall.code;
+		// else if (board[pinky.i][pinky.j] == bigBall.code)
+		// 	pinkyAte = bigBall.code;
+		// else if (board[pinky.i][pinky.j] == snail.code)
+		// 	pinkyAte = snail.code;
+		// else
+		// 	pinkyAte = 0;
+		returnEatenCandy(pinky,"pinky");
 		board[pinky.i][pinky.j] = 7;
 	}
 
 	else if(MonsterName=="clyde"){
-		if (board[clyde.i][clyde.j] == smallBall.code)
-			clydeAte = smallBall.code;
-		else if (board[clyde.i][clyde.j] == mediumBall.code)
-			clydeAte = mediumBall.code;
-		else if (board[clyde.i][clyde.j] == bigBall.code)
-			clydeAte = bigBall.code;
-		// else if (board[clyde.i][clyde.j] == star.code)
-		// 	clydeAte = star.code;
-		else
-			clydeAte = 0;
+		// if (board[clyde.i][clyde.j] == smallBall.code)
+		// 	clydeAte = smallBall.code;
+		// else if (board[clyde.i][clyde.j] == mediumBall.code)
+		// 	clydeAte = mediumBall.code;
+		// else if (board[clyde.i][clyde.j] == bigBall.code)
+		// 	clydeAte = bigBall.code;
+		// else if (board[clyde.i][clyde.j] == snail.code)
+		// 	clydeAte = snail.code;
+		// else
+		// 	clydeAte = 0;
+		returnEatenCandy(clyde,"clyde")
 		board[clyde.i][clyde.j] = 8;
 	}
 
@@ -596,14 +648,17 @@ function moveStar(){
 
 
 
-	if (board[star.i][star.j] == smallBall.code)
-		starAte = smallBall.code;
-	else if (board[star.i][star.j] == mediumBall.code)
-		starAte = mediumBall.code;
-	else if (board[star.i][star.j] == bigBall.code)
-		starAte = bigBall.code;
-	else
-		starAte = 0;
+	// if (board[star.i][star.j] == smallBall.code)
+	// 	starAte = smallBall.code;
+	// else if (board[star.i][star.j] == mediumBall.code)
+	// 	starAte = mediumBall.code;
+	// else if (board[star.i][star.j] == bigBall.code)
+	// 	starAte = bigBall.code;
+	// else if (board[star.i][star.j] == snail.code)
+	// 	starAte = snail.code;
+	// else
+	// 	starAte = 0;
+	returnEatenCandy(star,"star");
 	board[star.i][star.j] = star.code;
 }
 
@@ -619,71 +674,68 @@ function randPacmanStart() {
 
 function checkCollision(){
 
-	let collisionFound=false;
-	for(let i=0;i<numOfMons&&!collisionFound;i++){
-		if(i==0){
-			collisionFound=(blinky.i==shape.i&&blinky.j==shape.j);
-		}
-		else if(i==1){
-			collisionFound=(inky.i==shape.i&&inky.j==shape.j);
-		}
-		else if(i==2){
-			collisionFound=(pinky.i==shape.i&&pinky.j==shape.j);
-		}
-		else if(i==3){
-			collisionFound=(clyde.i==shape.i&&clyde.j==shape.j);
-		}
-	}
-
-	if(collisionFound){
-		randPacmanStart();
-		board[shape.i][shape.j]=0;
-		for(let i=0;i<numOfMons;i++){
-			if(i==0){
-				board[blinky.i][blinky.j]=blinkyAte;
-				blinkyAte=0;
-				blinky.i=0;
-				blinky.j=0;
-				board[blinky.i][blinky.j]=5;
-			}
-			else if(i==1){
-				board[inky.i][inky.j]=inkyAte;
-				inkyAte=0;
-				inky.i=0;
-				inky.j=boardJ-1;
-				board[inky.i][inky.j]=6;
-			}
-			else if(i==2){
-				board[pinky.i][pinky.j]=pinkyAte;
-				pinkyAte=0;
-				pinky.i=boardI-1;
-				pinky.j=0;
-				board[pinky.i][pinky.j]=7;
-			}
-			else if(i==3){
-				board[clyde.i][clyde.j]=clydeAte;
-				clydeAte=0;
-				clyde.i=boardI-1;
-				clyde.j=boardJ-1;
-				board[clyde.i][clyde.j]=8;
+	if (!godModeOn) {
+		let collisionFound = false;
+		for (let i = 0; i < numOfMons && !collisionFound; i++) {
+			if (i == 0) {
+				collisionFound = (blinky.i == shape.i && blinky.j == shape.j);
+			} else if (i == 1) {
+				collisionFound = (inky.i == shape.i && inky.j == shape.j);
+			} else if (i == 2) {
+				collisionFound = (pinky.i == shape.i && pinky.j == shape.j);
+			} else if (i == 3) {
+				collisionFound = (clyde.i == shape.i && clyde.j == shape.j);
 			}
 		}
 
-		if((--lives)==0)
-			endGame();
-		score-=10;
+		if (collisionFound) {
+			randPacmanStart();
+			board[shape.i][shape.j] = 0;
+			for (let i = 0; i < numOfMons; i++) {
+				if (i == 0) {
+					board[blinky.i][blinky.j] = blinkyAte;
+					blinkyAte = 0;
+					blinky.i = 0;
+					blinky.j = 0;
+					board[blinky.i][blinky.j] = 5;
+				} else if (i == 1) {
+					board[inky.i][inky.j] = inkyAte;
+					inkyAte = 0;
+					inky.i = 0;
+					inky.j = boardJ - 1;
+					board[inky.i][inky.j] = 6;
+				} else if (i == 2) {
+					board[pinky.i][pinky.j] = pinkyAte;
+					pinkyAte = 0;
+					pinky.i = boardI - 1;
+					pinky.j = 0;
+					board[pinky.i][pinky.j] = 7;
+				} else if (i == 3) {
+					board[clyde.i][clyde.j] = clydeAte;
+					clydeAte = 0;
+					clyde.i = boardI - 1;
+					clyde.j = boardJ - 1;
+					board[clyde.i][clyde.j] = 8;
+				}
+			}
+
+			if ((--lives) == 0)
+				endGame();
+			score -= 10;
 
 
-		window.clearInterval(intervalPac);
-		window.clearInterval(intervalMon);
-		intervalPac = setInterval(UpdatePosition, packmanSpeed);
-		intervalMon = setInterval(UpdateMonsterPosition, monstersSpeed);
+			window.clearInterval(intervalPac);
+			window.clearInterval(intervalMon);
+			intervalPac = setInterval(UpdatePosition, packmanSpeed);
+			intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
 
+		}
 	}
 
 	if(!starEaten&&(star.i==shape.i&&star.j==shape.j)){
 		starEaten=true;
 		score+=50;
+		enterGodMode();
 	}
 
 }
@@ -696,7 +748,7 @@ function endGame(){
 	{
 		alert("Game Completed!!!");
 	}
-	else if(time_elapsed<=0){
+	else if(time_elapsed<=0||candiesCounter==0){
 		if(score<100)
 			alert("You are better than "+score+" points!");
 		else
@@ -707,6 +759,44 @@ function endGame(){
 	// }
 	window.clearInterval(intervalPac);
 	window.clearInterval(intervalMon);
+	window.clearInterval(intervalSnail);
+}
+
+function returnEatenCandy(MovingEntity,Name){
+	var MovingEntityAte;
+	if (board[MovingEntity.i][MovingEntity.j] == smallBall.code)
+		MovingEntityAte = smallBall.code;
+	else if (board[MovingEntity.i][MovingEntity.j] == mediumBall.code)
+		MovingEntityAte = mediumBall.code;
+	else if (board[MovingEntity.i][MovingEntity.j] == bigBall.code)
+		MovingEntityAte = bigBall.code;
+	else if (board[MovingEntity.i][MovingEntity.j] == snail.code)
+		MovingEntityAte = snail.code;
+	else
+		MovingEntityAte = 0;
+
+	if(Name=="blinky")
+		blinkyAte=MovingEntityAte;
+	else if(Name=="inky")
+		inkyAte=MovingEntityAte;
+	else if(Name=="pinky")
+		pinkyAte=MovingEntityAte;
+	else if(Name=="clyde")
+		clydeAte=MovingEntityAte;
+	else if(Name=="star")
+		starAte=MovingEntityAte;
+
+
+
+}
+
+function enterGodMode(){
+	if(score>lastHundreadExcceded){
+		lastHundreadExcceded+=100;
+		godModeOn=true;
+		setTimeout(function () {godModeOn=false;pac_color="yellow";},7000);
+		pac_color="blue";
+	}
 }
 
 
