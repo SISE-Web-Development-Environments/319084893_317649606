@@ -57,7 +57,7 @@ var inkyAte=0;
 var pinkyAte=0;
 var clydeAte=0;
 var starAte=0;
-var packmanSpeed=150;
+var packmanSpeed=160;
 var monstersSpeed=280;
 var snailSpeed=4000;
 //endregion
@@ -72,8 +72,8 @@ star.code=11;
 snail.code=12;
 var starEaten=false;
 var snailEaten=false;
-var candiesCounter=(smallBall.amount+mediumBall.amount+bigBall.amount);
-var lastHundreadExcceded=100;
+var candiesCounter;
+var lastHundreadExcceded=200;
 
 var godModeOn=false;
 // bigBall.color="#00FF00";
@@ -208,6 +208,7 @@ function Start() {
 	lives=70;
 	pac_color = "yellow";
 	var cnt = boardI*boardJ;
+	candiesCounter= (smallBall.amount+mediumBall.amount+bigBall.amount);
 	var food_remain = (smallBall.amount+mediumBall.amount+bigBall.amount);
 	start_time = new Date();
 	game_time=90000;
@@ -461,7 +462,7 @@ function UpdatePosition() {
 
 	var currentTime = new Date();
 	time_elapsed = (game_time - (currentTime - start_time)) / 1000;
-	if (time_elapsed <= 0 || score == maxPoints||candiesCounter==0)
+	if (time_elapsed <= 0 || score >= maxPoints||candiesCounter==0)
 		endGame();
 	// if (score >= 20 && time_elapsed <= 10) {
 	// 	pac_color = "green";
@@ -556,22 +557,42 @@ function movePacman(){
 function moveMonster(MonsterName){
 	let Monster;
 	if(MonsterName=="blinky"){
-		board[blinky.i][blinky.j] = blinkyAte;
+		if(blinkyAte==snail.code){
+			if(blinky.i==snail.i&&blinky.j==snail.j)
+				board[blinky.i][blinky.j] = blinkyAte;
+		}
+		else
+			board[blinky.i][blinky.j] = blinkyAte;
 		Monster=blinky;
 	}
 
 	else if(MonsterName=="inky"){
-		board[inky.i][inky.j] = inkyAte;
+		if(inkyAte==snail.code){
+			if(inky.i==snail.i&&inky.j==snail.j)
+				board[inky.i][inky.j] = inkyAte;
+		}
+		else
+			board[inky.i][inky.j] = inkyAte;
 		Monster=inky;
 	}
 
 	else if(MonsterName=="pinky"){
-		board[pinky.i][pinky.j] = pinkyAte;
+		if(pinkyAte==snail.code){
+			if(pinky.i==snail.i&&pinky.j==snail.j)
+				board[pinky.i][pinky.j] = pinkyAte;
+		}
+		else
+			board[pinky.i][pinky.j] = pinkyAte;
 		Monster=pinky;
 	}
 
 	else if(MonsterName=="clyde"){
-		board[clyde.i][clyde.j] = clydeAte;
+		if(clydeAte==snail.code){
+			if(clyde.i==snail.i&&clyde.j==snail.j)
+				board[clyde.i][clyde.j] = clydeAte;
+		}
+		else
+			board[clyde.i][clyde.j] = clydeAte;
 		Monster=clyde;
 	}
 
@@ -688,7 +709,12 @@ function moveMonster(MonsterName){
 }
 
 function moveStar(){
-	board[star.i][star.j] = starAte;
+	if(starAte==snail.code){
+		if(star.i==snail.i&&star.j==snail.j)
+			board[star.i][star.j] = starAte;
+	}
+	else
+		board[star.i][star.j] = starAte;
 
 
 	var random=Math.floor(Math.random() * 4 + 1);
@@ -730,63 +756,64 @@ function randPacmanStart() {
 
 function checkCollision(){
 
-	if (!godModeOn) {
-		let collisionFound = false;
-		for (let i = 0; i < numOfMons && !collisionFound; i++) {
-			if (i == 0) {
-				collisionFound = (blinky.i == shape.i && blinky.j == shape.j);
-			} else if (i == 1) {
-				collisionFound = (inky.i == shape.i && inky.j == shape.j);
-			} else if (i == 2) {
-				collisionFound = (pinky.i == shape.i && pinky.j == shape.j);
-			} else if (i == 3) {
-				collisionFound = (clyde.i == shape.i && clyde.j == shape.j);
-			}
-		}
-
-		if (collisionFound) {
-			randPacmanStart();
-			board[shape.i][shape.j] = 0;
-			for (let i = 0; i < numOfMons; i++) {
-				if (i == 0) {
-					board[blinky.i][blinky.j] = blinkyAte;
-					blinkyAte = 0;
-					blinky.i = 0;
-					blinky.j = 0;
-					board[blinky.i][blinky.j] = 5;
-				} else if (i == 1) {
-					board[inky.i][inky.j] = inkyAte;
-					inkyAte = 0;
-					inky.i = 0;
-					inky.j = boardJ - 1;
-					board[inky.i][inky.j] = 6;
-				} else if (i == 2) {
-					board[pinky.i][pinky.j] = pinkyAte;
-					pinkyAte = 0;
-					pinky.i = boardI - 1;
-					pinky.j = 0;
-					board[pinky.i][pinky.j] = 7;
-				} else if (i == 3) {
-					board[clyde.i][clyde.j] = clydeAte;
-					clydeAte = 0;
-					clyde.i = boardI - 1;
-					clyde.j = boardJ - 1;
-					board[clyde.i][clyde.j] = 8;
-				}
-			}
-
-			if ((--lives) == 0)
-				endGame();
-			score -= 10;
-
-
-			window.clearInterval(intervalPac);
-			window.clearInterval(intervalMon);
-			intervalPac = setInterval(UpdatePosition, packmanSpeed);
-			intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
-
+	let collisionFound = false;
+	for (let i = 0; i < numOfMons && !collisionFound; i++) {
+		if (i == 0) {
+			collisionFound = (blinky.i == shape.i && blinky.j == shape.j);
+		} else if (i == 1) {
+			collisionFound = (inky.i == shape.i && inky.j == shape.j);
+		} else if (i == 2) {
+			collisionFound = (pinky.i == shape.i && pinky.j == shape.j);
+		} else if (i == 3) {
+			collisionFound = (clyde.i == shape.i && clyde.j == shape.j);
 		}
 	}
+
+	if (collisionFound && !godModeOn) {
+		randPacmanStart();
+		board[shape.i][shape.j] = 0;
+		for (let i = 0; i < numOfMons; i++) {
+			if (i == 0) {
+				board[blinky.i][blinky.j] = blinkyAte;
+				blinkyAte = 0;
+				blinky.i = 0;
+				blinky.j = 0;
+				board[blinky.i][blinky.j] = 5;
+			} else if (i == 1) {
+				board[inky.i][inky.j] = inkyAte;
+				inkyAte = 0;
+				inky.i = 0;
+				inky.j = boardJ - 1;
+				board[inky.i][inky.j] = 6;
+			} else if (i == 2) {
+				board[pinky.i][pinky.j] = pinkyAte;
+				pinkyAte = 0;
+				pinky.i = boardI - 1;
+				pinky.j = 0;
+				board[pinky.i][pinky.j] = 7;
+			} else if (i == 3) {
+				board[clyde.i][clyde.j] = clydeAte;
+				clydeAte = 0;
+				clyde.i = boardI - 1;
+				clyde.j = boardJ - 1;
+				board[clyde.i][clyde.j] = 8;
+			}
+		}
+
+		if ((--lives) == 0)
+			endGame();
+		score -= 10;
+
+
+		window.clearInterval(intervalPac);
+		window.clearInterval(intervalMon);
+		intervalPac = setInterval(UpdatePosition, packmanSpeed);
+		intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
+
+	}
+	else if(collisionFound&&godModeOn)
+		board[shape.i][shape.j]=2;
+
 
 	if(!starEaten&&(star.i==shape.i&&star.j==shape.j)){
 		starEaten=true;
@@ -800,7 +827,7 @@ function endGame(){
 	if(lives==0){
 		alert("Loser!");
 	}
-	else if(score==maxPoints)
+	else if(score>=maxPoints)
 	{
 		alert("Game Completed!!!");
 	}
@@ -849,9 +876,9 @@ function returnEatenCandy(MovingEntity,Name){
 
 function enterGodMode(){
 	if(score>lastHundreadExcceded){
-		lastHundreadExcceded+=100;
+		lastHundreadExcceded+=250;
 		godModeOn=true;
-		setTimeout(function () {godModeOn=false;pac_color="yellow";},7000);
+		setTimeout(function () {godModeOn=false;pac_color="yellow";},5000);
 		pac_color="blue";
 	}
 }
