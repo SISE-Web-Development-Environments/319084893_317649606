@@ -26,9 +26,6 @@ $(document).ready(function() {
 	
 	});
 
-	$("#menuabout").click(function(){
-		$("#myModal").show();
-	});
     /*----------------------log in to system-------------------------*/
     
     $("#loginSubmit").click(function(){

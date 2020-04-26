@@ -1,4 +1,5 @@
 var context;
+// var audio= new sound("beginning.wav");
 var shape = new Object();
 var gameDuration;
 var numOfBalls;
@@ -112,7 +113,7 @@ $(document).ready(function() {
 			bigBall.color=document.getElementById("ball25").value;
 			mediumBall.color=document.getElementById("ball15").value;
 			smallBall.color=document.getElementById("ball5").value;
-			gameDuration=document.getElementById("duration").value;
+			gameDuration=document.getElementById("duration").value*1000;
 			upKey=document.getElementById("upKeyIn_disp").value;
 			downKey=document.getElementById("downKeyIn_disp").value;
 			rightKey=document.getElementById("rightKeyIn_disp").value;
@@ -153,42 +154,42 @@ $(document).ready(function() {
 
 	});
 
-	$("#restartBut").click(function(){
-		window.clearInterval(intervalPac);
-		window.clearInterval(intervalMon);
-		window.clearInterval(intervalSnail);
-		if (confirm("Are you sure you want to restart the game?")) 
-		{
-			bigBall.amount=numOfBalls*0.1;
-			mediumBall.amount=numOfBalls*0.3;
-			smallBall.amount=numOfBalls*0.6;
-			maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
-			Start();
-		} 
-		else 
-		{
-			intervalPac = setInterval(UpdatePosition, packmanSpeed);
-			intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
-			intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
-		}
-	});
+	// $("#restartBut").click(function(){
+	// 	window.clearInterval(intervalPac);
+	// 	window.clearInterval(intervalMon);
+	// 	window.clearInterval(intervalSnail);
+	// 	if (confirm("Are you sure you want to restart the game?")) 
+	// 	{
+	// 		bigBall.amount=numOfBalls*0.1;
+	// 		mediumBall.amount=numOfBalls*0.3;
+	// 		smallBall.amount=numOfBalls*0.6;
+	// 		maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
+	// 		Start();
+	// 	} 
+	// 	else 
+	// 	{
+	// 		intervalPac = setInterval(UpdatePosition, packmanSpeed);
+	// 		intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
+	// 		intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
+	// 	}
+	// });
 
-	$("#newGameBut").click(function(){
-		window.clearInterval(intervalPac);
-		window.clearInterval(intervalMon);
-		window.clearInterval(intervalSnail);
-		if (confirm("Are you sure you want to start a new game?")) 
-		{
-			$(".screen").hide();
-			$("#optionsScreen").show();
-		} 
-		else 
-		{
-			intervalPac = setInterval(UpdatePosition, packmanSpeed);
-			intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
-			intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
-		}
-	});
+	// $("#newGameBut").click(function(){
+	// 	window.clearInterval(intervalPac);
+	// 	window.clearInterval(intervalMon);
+	// 	window.clearInterval(intervalSnail);
+	// 	if (confirm("Are you sure you want to start a new game?")) 
+	// 	{
+	// 		$(".screen").hide();
+	// 		$("#optionsScreen").show();
+	// 	} 
+	// 	else 
+	// 	{
+	// 		intervalPac = setInterval(UpdatePosition, packmanSpeed);
+	// 		intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
+	// 		intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
+	// 	}
+	// });
 
 });
 
@@ -202,6 +203,8 @@ function startGame()
 }
 
 function Start() {
+	// audio.stop();
+	// audio.start();
 	showUser.value="Hello, "+document.getElementById("tryUsername").value;;
 	board = new Array();
 	score = 0;
@@ -210,8 +213,7 @@ function Start() {
 	var cnt = boardI*boardJ;
 	candiesCounter= (smallBall.amount+mediumBall.amount+bigBall.amount);
 	var food_remain = (smallBall.amount+mediumBall.amount+bigBall.amount);
-	start_time = new Date();
-	game_time=90000;
+	start_time = new Date()
 
 
 	// ------------------ create all objects on board-----------------------------
@@ -319,6 +321,7 @@ function Start() {
 	addEventListener(
 		"keydown",
 		function(e) {
+			e.preventDefault();
 			keysDown[e.keyCode] = true;
 		},
 		false
@@ -461,7 +464,7 @@ function UpdatePosition() {
 
 
 	var currentTime = new Date();
-	time_elapsed = (game_time - (currentTime - start_time)) / 1000;
+	time_elapsed = (gameDuration - (currentTime - start_time)) / 1000;
 	if (time_elapsed <= 0 || score >= maxPoints||candiesCounter==0)
 		endGame();
 	// if (score >= 20 && time_elapsed <= 10) {
@@ -826,20 +829,30 @@ function checkCollision(){
 function endGame(){
 	if(lives==0){
 		alert("Loser!");
+		$(".screen").hide();
+		$("#optionsScreen").show();
 	}
 	else if(score>=maxPoints)
 	{
 		alert("Game Completed!!!");
+		 $(".screen").hide();
+            $("#optionsScreen").show();
 	}
 	else if(time_elapsed<=0||candiesCounter==0){
 		if(score<100)
+		{
 			alert("You are better than "+score+" points!");
+			$(".screen").hide();
+            $("#optionsScreen").show();
+		}
 		else
+		{
 			alert("Winner!!!");
+			$(".screen").hide();
+            $("#optionsScreen").show();
+		}
 	}
-	// else if (score == 50) {
-	// 	window.alert("Game completed");
-	// }
+
 	window.clearInterval(intervalPac);
 	window.clearInterval(intervalMon);
 	window.clearInterval(intervalSnail);
@@ -920,6 +933,47 @@ function checkNotAbcentFigure(){
 	else
 		return (pacmanExists&&blinkyExists&&inkyExists&&pinkyExists&&clydeExists);
 
+}
+
+
+function restartGame()
+{
+	window.clearInterval(intervalPac);
+	window.clearInterval(intervalMon);
+	window.clearInterval(intervalSnail);
+	if (confirm("Are you sure you want to restart the game?")) 
+	{
+		bigBall.amount=numOfBalls*0.1;
+		mediumBall.amount=numOfBalls*0.3;
+		smallBall.amount=numOfBalls*0.6;
+		maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
+		Start();
+	} 
+	else
+	{
+		intervalPac = setInterval(UpdatePosition, packmanSpeed);
+		intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
+		intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
+	}
+
+}
+
+function newGame()
+{
+	window.clearInterval(intervalPac);
+	window.clearInterval(intervalMon);
+	window.clearInterval(intervalSnail);
+	if (confirm("Are you sure you want to start a new game?")) 
+	{
+		$(".screen").hide();
+		$("#optionsScreen").show();
+	} 
+	else 
+	{
+		intervalPac = setInterval(UpdatePosition, packmanSpeed);
+		intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
+		intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
+	}
 }
 
 
