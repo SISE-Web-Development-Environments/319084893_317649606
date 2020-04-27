@@ -54,7 +54,7 @@
 		<div id="game" class="wrapper">
 			</br>
 			<canvas id="canvas" height="600" width="600"></canvas>
-
+			
 			<div class="bla" style="position: absolute; top:0; left:0; margin-left: 15%; margin-top: 10%;">
 				<output style="font-size:32px;" id="showUser"></br>
 			</div>
@@ -66,8 +66,12 @@
 				<button type="button" class="button" id="newGameBut" onclick="newGame()">New Game</button>
 			</div>
 
-
-			<div class="controls" style="position: absolute; top:0; left:0; margin-left: 80%; margin-top: 16%;">
+			<div class="sounds" style="position: absolute; top:0; left:0; margin-left: 93%; margin-top: 5%;">
+				
+			</div>
+			<div class="controls" style="position: absolute; top:0; left:0; margin-left: 80%; margin-top: 10%;">
+				<img id="musicIm" src="musicon.png" height="56" width="56" onclick="musicToggle()">
+				<img id="soundIm" src="soundon.png" height="42" width="42" onclick="soundToggle()">
 				<fieldset>
 					<label><u>Game Settings:</u></label></br></br>
 					<label for="side_upKey">Up Key:</label>
@@ -140,10 +144,6 @@
 		</br>
 		</br>
 		<form>
-			<!-- <div class="imgcontainer">
-				  <img src="img_avatar2.png" alt="Avatar" class="avatar">
-				</div> -->
-
 			<div class="container">
 				<label for="uname"><b>Username</b></label>
 				<input id="tryUsername" type="text" placeholder="Enter Username" name="uname" required>
@@ -187,7 +187,7 @@
 				</p>
 				<p>
 					<label for="ballNum">Number of balls:</label>
-					<input type="range" name="ballNum" id="ballNum" value="50" min="50" max="90" oninput="ballNum_disp.value = ballNum.value; side_balls.value=ballNum.value;">
+					<input type="range" name="ballNum" id="ballNum" value="50" min="50" max="89" oninput="ballNum_disp.value = ballNum.value; side_balls.value=ballNum.value;">
 					<output id="ballNum_disp">50</output>
 				</p>
 				<p>
@@ -204,7 +204,8 @@
 				</p>
 				<p>
 					<label for="duration">Duration:</label>
-					<input id="duration" name="duration" type="text" size="4" value="80" oninput="side_duration.value = duration.value">
+					<input id="duration" name="duration" type="range" value="60" min="60" max="250" oninput="side_duration.value = duration.value;duration_disp.value=duration.value;">
+					<output id="duration_disp">60</output>
 					<button id="optionsSubmit" class="button" type="submit" style="position: absolute;margin-left:6%;">Play Game</button>
 
 				</p>
@@ -228,20 +229,15 @@
 		<p>we used jqueryvalidation, and for showing models,</p>
 		<p>we used jQuery-Modal</p>
 	</div>
-
-	<!-- <div id="gameEndedScreen" class="modal">
-		<p id="endText"></p>
-		<p rel="modal:close">Click Escape to start a new game</p>
-		<a href="#" rel="modal:close">Close</a>
-	</div> -->
-
-
 </body>
 
 <footer>
 
-	<p>If you experience any technical issues, deal with it, it's just a pacman game, there are literally a million versions of it online<br>
-	But... if you're really <b>that</b> stubborn, you may contact us at: <a href="mailto:maximzh@post.bgu.ac.il">maximzh@post.bgu.ac.il</a> <a href="mailto:seanav@post.bgu.ac.il">seanav@post.bgu.ac.il</a> .... god</p>
+	<p>If you experience any technical issues, deal with it, it's just a pacman game, there are literally a million versions of it online
+		<br>
+		But... if you're really <b>that</b> stubborn, you may contact us at: <a href="mailto:maximzh@post.bgu.ac.il">maximzh@post.bgu.ac.il</a>
+	 	<a href="mailto:seanav@post.bgu.ac.il">seanav@post.bgu.ac.il</a> .... god
+	</p>
   </footer>
 
 </html>
