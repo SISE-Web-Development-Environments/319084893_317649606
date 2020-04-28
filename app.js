@@ -212,6 +212,11 @@ function startGame()
 }
 
 function Start() {
+
+	window.clearInterval(intervalPac);
+	window.clearInterval(intervalMon);
+	window.clearInterval(intervalSnail);
+	
 	backMusic.pause();
 	musicToggle();
 	if(soundVolume==0) soundToggle();
@@ -791,6 +796,7 @@ function checkCollision(){
 
 function endGame(){
 	
+	
 
 	backMusic.pause();
 
@@ -818,6 +824,7 @@ function endGame(){
 	}
 	
 	if(soundVolume!=0) soundToggle();
+	gameDuration=100000000000;
 	window.clearInterval(intervalPac);
 	window.clearInterval(intervalMon);
 	window.clearInterval(intervalSnail);
