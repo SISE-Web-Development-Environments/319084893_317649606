@@ -353,13 +353,26 @@ function Start() {
 
 function findRandomEmptyCell(board) 
 {
-	var i = Math.floor(Math.random() * (boardI));
-	var j = Math.floor(Math.random() * (boardJ));
-	while (board[i][j] != 0) {
-		i = Math.floor(Math.random() * (boardI));
-		j = Math.floor(Math.random() * (boardJ));
+	let emptyCells=new Array();
+	for(let i=0;i<boardI;i++){
+		for(let j=0;j<boardJ;j++){
+			if(board[i][j]==0){
+				emptyCells.push({i:i,j:j});
+			}
+		}
 	}
-	return [i, j];
+
+	var randomCell = Math.floor(Math.random()*emptyCells.length);
+
+	return [emptyCells[randomCell].i,emptyCells[randomCell].j];
+
+	// var i = Math.floor(Math.random() * (boardI));
+	// var j = Math.floor(Math.random() * (boardJ));
+	// while (board[i][j] != 0) {
+	// 	i = Math.floor(Math.random() * (boardI));
+	// 	j = Math.floor(Math.random() * (boardJ));
+	// }
+	// return [i, j];
 }
 
 function GetKeyPressed() {
@@ -715,12 +728,28 @@ function moveStar(){
 }
 
 function randPacmanStart() {
-	shape.i = Math.floor(Math.random() * 6 + 2);
-	shape.j = Math.floor(Math.random() * 6 + 2);
-	while (board[shape.i][shape.j] !=0 ) {
-		shape.i = Math.floor(Math.random() * 6 + 2);
-		shape.j = Math.floor(Math.random() * 6 + 2);
+	let emptyCells=new Array();
+	for(let i=0;i<boardI;i++){
+		for(let j=0;j<boardJ;j++){
+			if((i==0&j==0)||(i==0&&j==boardJ-1)||(i==boardI-1&&j==0)||(i==boardI-1&&j==boardJ-1))
+				continue;
+			if(board[i][j]==0)
+				emptyCells.push({i:i,j:j});
+		}
 	}
+
+	var randomCell = Math.floor(Math.random()*emptyCells.length);
+
+	shape.i=emptyCells[randomCell].i;
+	shape.j=emptyCells[randomCell].j;
+
+
+	// shape.i = Math.floor(Math.random() * 6 + 2);
+	// shape.j = Math.floor(Math.random() * 6 + 2);
+	// while (board[shape.i][shape.j] !=0 ) {
+	// 	shape.i = Math.floor(Math.random() * 6 + 2);
+	// 	shape.j = Math.floor(Math.random() * 6 + 2);
+	// }
 	board[shape.i][shape.j] = 2;
 }
 
@@ -982,6 +1011,8 @@ function initializeGameParameters(){
 	lives=5;
 	pac_color = "yellow";
 	candiesCounter= (smallBall.amount+mediumBall.amount+bigBall.amount);
+
+	let n=0;
 }
 
 
