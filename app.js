@@ -127,9 +127,10 @@ $(document).ready(function() {
 			rightKey=document.getElementById("rightKeyIn_disp").value;
 			leftKey=document.getElementById("leftKeyIn_disp").value;
 
-			bigBall.amount=numOfBalls*0.1;
-			mediumBall.amount=numOfBalls*0.3;
-			smallBall.amount=numOfBalls*0.6;
+			bigBall.amount=Math.floor(numOfBalls*0.1);
+			mediumBall.amount=Math.floor(numOfBalls*0.3);
+			smallBall.amount=Math.floor(numOfBalls*0.6);
+			smallBall.amount+=(numOfBalls-(bigBall.amount+mediumBall.amount+smallBall.amount));
 			maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
 
 
@@ -895,7 +896,7 @@ function enterGodMode(){
 		godSound.play();
 		lastHundreadExcceded+=250;
 		godModeOn=true;
-		setTimeout(function () {godModeOn=false;pac_color="yellow";},5000);
+		setTimeout(function () {godModeOn=false;pac_color="yellow";},3500);
 		pac_color="blue";
 	}
 }
@@ -918,9 +919,10 @@ function restartGame()
 	window.clearInterval(intervalSnail);
 	if (confirm("Are you sure you want to restart the game?")) 
 	{
-		bigBall.amount=numOfBalls*0.1;
-		mediumBall.amount=numOfBalls*0.3;
-		smallBall.amount=numOfBalls*0.6;
+		bigBall.amount=Math.floor(numOfBalls*0.1);
+		mediumBall.amount=Math.floor(numOfBalls*0.3);
+		smallBall.amount=Math.floor(numOfBalls*0.6);
+		smallBall.amount+=(numOfBalls-(bigBall.amount+mediumBall.amount+smallBall.amount));
 		maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
 		Start();
 	} 
@@ -1008,9 +1010,9 @@ function initializeGameParameters(){
 	godModeOn=false;
 
 	score = 0;
-	lives=5;
+	lives=100;
 	pac_color = "yellow";
-	candiesCounter= (smallBall.amount+mediumBall.amount+bigBall.amount);
+	candiesCounter= numOfBalls;
 
 	let n=0;
 }
