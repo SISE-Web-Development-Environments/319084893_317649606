@@ -43,6 +43,10 @@ var snailImage=new Image();
 snailImage.src="snail.png";
 var snail=new Object();
 
+var tubeImage=new Image();
+tubeImage.src="tube.png";
+var tube=new Object();
+
 
 //endregion
 
@@ -80,18 +84,13 @@ mediumBall.code=9;
 smallBall.code=10;
 star.code=11;
 snail.code=12;
+tube.code=13;
 var starEaten;
 var snailEaten;
 var candiesCounter;
 var lastHundreadExcceded;
 var godModeOn;
-// bigBall.color="#00FF00";
-// mediumBall.color="#ff0000";
-// smallBall.color="#000000";
-// bigBall.amount=50*0.1;
-// mediumBall.amount=50*0.3;
-// smallBall.amount=50*0.6;
-// var maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
+
 
 
 var boardI=10;
@@ -260,11 +259,9 @@ function Start() {
 			clyde.j=boardJ-1;
 		}
 	}
-	//insert monsters
 
 
 	//insert walls
-
 	board[3][3] = 4;
 	board[3][4] = 4;
 	board[3][5] = 4;
@@ -277,6 +274,15 @@ function Start() {
 	shape.i = emptyCell[0];
 	shape.j = emptyCell[1];
 	board[shape.i][shape.j] = 2;
+
+	//insert star
+	if(checkCornersEmpty())
+		emptyCell=randomizeCorner(board);
+	else
+		emptyCell=findRandomEmptyCell(board);
+	board[emptyCell[0]][emptyCell[1]]=star.code;
+	star.i=emptyCell[0];
+	star.j=emptyCell[1];
 
 	//insert food
 	while (food_remain > 0) 
@@ -316,17 +322,19 @@ function Start() {
 		food_remain--;
 	}
 
-	//insert star
-	emptyCell=findRandomEmptyCell(board);
-	board[emptyCell[0]][emptyCell[1]]=star.code;
-	star.i=emptyCell[0];
-	star.j=emptyCell[1];
+
 
 	//insert snail
 	emptyCell=findRandomEmptyCell(board);
 	board[emptyCell[0]][emptyCell[1]]=snail.code;
 	snail.i=emptyCell[0];
 	snail.j=emptyCell[1];
+
+	//insert tube
+	emptyCell=findRandomEmptyCell(board);
+	board[emptyCell[0]][emptyCell[1]]=tube.code;
+	tube.i=emptyCell[0];
+	tube.j=emptyCell[1];
 	// ----------------------------------------------------------------------------------
 
 	keysDown = {};
@@ -367,13 +375,6 @@ function findRandomEmptyCell(board)
 
 	return [emptyCells[randomCell].i,emptyCells[randomCell].j];
 
-	// var i = Math.floor(Math.random() * (boardI));
-	// var j = Math.floor(Math.random() * (boardJ));
-	// while (board[i][j] != 0) {
-	// 	i = Math.floor(Math.random() * (boardI));
-	// 	j = Math.floor(Math.random() * (boardJ));
-	// }
-	// return [i, j];
 }
 
 function GetKeyPressed() {
@@ -454,6 +455,9 @@ function Draw() {
 			else if (board[i][j] == snail.code) {
 				context.drawImage(snailImage, center.x - 30, center.y - 30, canvas.width / boardJ, canvas.height / boardI);
 			}
+			else if (board[i][j] == tube.code) {
+				context.drawImage(tubeImage, center.x - 30, center.y - 30, canvas.width / boardJ, canvas.height / boardI);
+			}
 		}
 	}
 
@@ -487,9 +491,12 @@ function UpdatePosition() {
 			intervalMon=setInterval(UpdateMonsterAndStarPosition,monstersSpeed);backMusic.playbackRate=1;
 		},10000);
 	}
+	else if(board[shape.i][shape.j] == tube.code){
+		enterGodMode();
+	}
 	board[shape.i][shape.j] = 2;
 
-	enterGodMode();
+	//enterGodMode();
 
 	checkCollision();
 
@@ -498,10 +505,6 @@ function UpdatePosition() {
 	time_elapsed = (gameDuration - (currentTime - start_time)) / 1000;
 	if (time_elapsed <= 0 || score >= maxPoints||candiesCounter==0)
 		endGame();
-	// if (score >= 20 && time_elapsed <= 10) {
-	// 	pac_color = "green";
-	// } else {
-	// }
 	Draw();
 
  
@@ -744,13 +747,6 @@ function randPacmanStart() {
 	shape.i=emptyCells[randomCell].i;
 	shape.j=emptyCells[randomCell].j;
 
-
-	// shape.i = Math.floor(Math.random() * 6 + 2);
-	// shape.j = Math.floor(Math.random() * 6 + 2);
-	// while (board[shape.i][shape.j] !=0 ) {
-	// 	shape.i = Math.floor(Math.random() * 6 + 2);
-	// 	shape.j = Math.floor(Math.random() * 6 + 2);
-	// }
 	board[shape.i][shape.j] = 2;
 }
 
@@ -812,14 +808,19 @@ function checkCollision(){
 		intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
 
 	}
-	else if(collisionFound&&godModeOn)
+	else if(collisionFound&&godModeOn){
 		board[shape.i][shape.j]=2;
+		// window.clearInterval(intervalMon);
+		// setTimeout(function () {intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);},1000);
+
+	}
+
 
 
 	if(!starEaten&&(star.i==shape.i&&star.j==shape.j)){
 		starEaten=true;
 		score+=50;
-		enterGodMode();
+		//enterGodMode();
 	}
 
 }
@@ -873,6 +874,8 @@ function returnEatenCandy(MovingEntity,Name){
 		MovingEntityAte = bigBall.code;
 	else if (board[MovingEntity.i][MovingEntity.j] == snail.code)
 		MovingEntityAte = snail.code;
+	else if (board[MovingEntity.i][MovingEntity.j] == tube.code)
+		MovingEntityAte = tube.code;
 	else
 		MovingEntityAte = 0;
 
@@ -892,13 +895,11 @@ function returnEatenCandy(MovingEntity,Name){
 }
 
 function enterGodMode(){
-	if(score>lastHundreadExcceded){
-		godSound.play();
-		lastHundreadExcceded+=250;
-		godModeOn=true;
-		setTimeout(function () {godModeOn=false;pac_color="yellow";},3500);
-		pac_color="blue";
-	}
+	godSound.play();
+	lastHundreadExcceded+=250;
+	godModeOn=true;
+	setTimeout(function () {godModeOn=false;pac_color="yellow";},3500);
+	pac_color="#00FF00";
 }
 
 
@@ -1014,7 +1015,36 @@ function initializeGameParameters(){
 	pac_color = "yellow";
 	candiesCounter= numOfBalls;
 
+
 	let n=0;
+}
+
+function randomizeCorner(board){
+	let emptyCorners=new Array();
+	if(board[0][0]==0)
+		emptyCorners.push({i:0,j:0});
+	if(board[boardI-1][0]==0)
+		emptyCorners.push({i:boardI-1,j:0});
+	if(board[0][boardJ-1]==0)
+		emptyCorners.push({i:0,j:boardJ-1});
+	if(board[boardI-1][boardJ-1]==0)
+		emptyCorners.push({i:boardI-1,j:boardJ-1});
+
+	var randomCell = Math.floor(Math.random()*emptyCorners.length);
+
+	return [emptyCorners[randomCell].i,emptyCorners[randomCell].j];
+}
+
+function checkCornersEmpty(){
+	if(board[0][0]==0)
+		return true;
+	if(board[boardI-1][0]==0)
+		return true;
+	if(board[0][boardJ-1]==0)
+		return true;
+	if(board[boardI-1][boardJ-1]==0)
+		return true;
+	return false;
 }
 
 
