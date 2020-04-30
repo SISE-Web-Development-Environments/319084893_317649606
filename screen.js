@@ -1,13 +1,15 @@
 
 $(document).ready(function() {
+
+    /*-----------------add a defalut user--------------------*/
+    localStorage.setItem("p",JSON.stringify({firstname:"p",lastName:"p",username:"p",password:"p",email:"p",birthday:"18/11/1997"}));
+
     /*-----------------switch divs--------------------*/
 	$("#menureg,#signupButton").click(function(){
 		$("li").removeClass("active");
 		$("#menureg").addClass("active");
 		$(".screen").hide();
 		$("#registerScreen").show();
-		
-	
 	});
 
 	$("#menuwelcome").click(function(){
@@ -15,7 +17,6 @@ $(document).ready(function() {
 		$("#menuwelcome").addClass("active");
 		$(".screen").hide();
 		$("#welcomeScreen").show();
-	
 	});
 
 	$("#menulogin,#loginButton").click(function(){
@@ -23,7 +24,6 @@ $(document).ready(function() {
 		$("#menulogin").addClass("active");
 		$(".screen").hide();
 		$("#loginScreen").show();
-	
 	});
 
     /*----------------------log in to system-------------------------*/
@@ -33,7 +33,6 @@ $(document).ready(function() {
         {
             $(".screen").hide();
             $("#optionsScreen").show();
-            // startGame();
         }
         else
         {
@@ -100,7 +99,7 @@ $(document).ready(function() {
         return (value.match(/[a-zA-Z]/) && value.match(/[0-9]/));
     }, 'Password must contain at least one numeric and one alphabetic character');
 
-    //add user to the array
+    //add user to local storage
     $("#regSubmit").click(function(e)
     {
         e.preventDefault();
@@ -112,7 +111,7 @@ $(document).ready(function() {
             let password=document.getElementById("password").value;
             let email=document.getElementById("email").value;
             let birthday=document.getElementById("birthday").value;
-            users.push({firstname:firstname,lastName:lastname,username:username,password:password,email:email,birthday:birthday});
+            localStorage.setItem(username,JSON.stringify({firstname:firstname,lastName:lastname,username:username,password:password,email:email,birthday:birthday}));
             $("#firstname").val("");
             $("#lastname").val("");
             $("#username").val("");
@@ -124,36 +123,22 @@ $(document).ready(function() {
         }  
     });
 
-        /*---------------------------------------------------------------------------*/
-
-    
+    /*---------------------------------------------------------------------------*/
+  
 });
 
-//the user array
-let users = [
-    {
-      firstname: "p",
-      lastName: "p",
-      username: "p",
-      password: "p",
-      email: "p",
-      birthday: "18/11/1997"
-    }
-  ];
-
-  /**
-   * make sure user name and password are good
-   */
+/**
+ * make sure user name and password are good
+ */
 function validateUser(username,password)
 {
-    let exists=false;
-    users.forEach(function(user){
-        if(username==user.username && password==user.password)
-        {
-            exists=true;
-        }
-    });
-    return exists;
+    let tempUser=JSON.parse(localStorage.getItem(username));
+    if(tempUser != null)
+    {
+        if(tempUser.password==password)
+            return true;
+    }
+    return false;
 }
 
 /**
@@ -161,13 +146,8 @@ function validateUser(username,password)
  */
 function userExsists(username)
 {
-    let exists=false;
-    users.forEach(function(user){
-        if(username==user.username)
-        {
-            exists=true;
-        }
-    });
-    return exists;
+    if(JSON.parse(localStorage.getItem(username))==null)
+        return false;
+    else
+        return true;
 }
-
