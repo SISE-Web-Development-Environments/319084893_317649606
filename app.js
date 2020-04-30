@@ -125,6 +125,8 @@ $(document).ready(function() {
 			downKey=document.getElementById("downKeyIn_disp").value;
 			rightKey=document.getElementById("rightKeyIn_disp").value;
 			leftKey=document.getElementById("leftKeyIn_disp").value;
+			
+			setSideValues();
 
 			bigBall.amount=Math.floor(numOfBalls*0.1);
 			mediumBall.amount=Math.floor(numOfBalls*0.3);
@@ -766,6 +768,7 @@ function checkCollision(){
 	}
 
 	if (collisionFound && !godModeOn) {
+		backMusic.playbackRate=1;
 		dieSound.play();
 		randPacmanStart();
 		board[shape.i][shape.j] = 0;
@@ -1048,8 +1051,22 @@ function checkCornersEmpty(){
 }
 
 
-
-
+function setSideValues()
+{
+	side_upKey.value=document.getElementById("upKeyIn_disp").value;
+	side_downKey.value=document.getElementById("downKeyIn_disp").value;
+	side_leftKey.value=document.getElementById("leftKeyIn_disp").value;
+	side_rightKey.value=document.getElementById("rightKeyIn_disp").value;
+	side_balls.value=document.getElementById("ballNum_disp").value;
+	side_ball25.value=ntc.name(document.getElementById("ball25").value)[1];
+	document.getElementById("side_ball25").style.color = document.getElementById("ball25").value;
+	side_ball15.value=ntc.name(document.getElementById("ball15").value)[1];
+	document.getElementById("side_ball15").style.color = document.getElementById("ball15").value;
+	side_ball5.value=ntc.name(document.getElementById("ball5").value)[1];
+	document.getElementById("side_ball5").style.color = document.getElementById("ball5").value;
+	side_duration.value = document.getElementById("duration_disp").value;
+	side_monsters.value=document.getElementById("monsterNum_disp").value;
+}
 
 
 

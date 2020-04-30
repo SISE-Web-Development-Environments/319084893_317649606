@@ -6,6 +6,7 @@
 	<script type="text/javascript" src="./app.js"></script>
 	<script type="text/javascript" src="./screen.js"></script>
 	<script type="text/javascript" src="./jquery.validate.js"></script>
+	<script type="text/javascript" src="/ntc.js"></script>
 	<link rel="stylesheet" href="styles.css">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
@@ -75,8 +76,8 @@
 					<output id="side_upKey">38</output></br>
 					<label for="side_downKey">Down Key:</label>
 					<output id="side_downKey">40</output></br>
-					<label for="side_righyKey">Right Key:</label>
-					<output id="side_righyKey">39</output></br>
+					<label for="side_rightKey">Right Key:</label>
+					<output id="side_rightKey">39</output></br>
 					<label for="side_leftKey">Left Key:</label>
 					<output id="side_leftKey">37</output></br>
 					<label for="side_balls">Number of balls:</label>
@@ -164,51 +165,51 @@
 			<fieldset>
 				<p>
 					<label for="upKeyIn">UpKey:</label>
-					<input id="upKeyIn" name="upKeyIn" type="text" size="3" onkeydown="upKeyIn.value='';upKeyIn_disp.value=event.keyCode; side_upKey.value=event.keyCode">
+					<input id="upKeyIn" name="upKeyIn" type="text" size="3" onkeydown="upKeyIn.value='';upKeyIn_disp.value=event.charCode; setSideValues()">
 					<output id="upKeyIn_disp" >38</output>
 				</p>
 				<p>
 					<label for="downKeyIn">DownKey:</label>
-					<input id="downKeyIn" name="downKeyIn" type="text" size="3" onkeydown="downKeyIn.value='';downKeyIn_disp.value=event.keyCode; side_downKey.value=event.keyCode">
+					<input id="downKeyIn" name="downKeyIn" type="text" size="3" onkeydown="downKeyIn.value='';downKeyIn_disp.value=event.keyCode; setSideValues()">
 					<output id="downKeyIn_disp" >40</output>
 				</p>
 				<p>
 					<label for="rightKeyIn">RigthKey:</label>
-					<input id="rightKeyIn" name="rightKeyIn" type="text" size="3" onkeydown="rightKeyIn.value='';rightKeyIn_disp.value=event.keyCode; side_rightKey.value=event.keyCode">
+					<input id="rightKeyIn" name="rightKeyIn" type="text" size="3" onkeydown="rightKeyIn.value='';rightKeyIn_disp.value=event.keyCode; setSideValues()">
 					<output id="rightKeyIn_disp" >39</output>
 				</p>
 				<p>
 					<label for="leftKeyIn">LeftKey:</label>
-					<input id="leftKeyIn" name="leftKeyIn" type="text" size="3" onkeydown="leftKeyIn.value='';leftKeyIn_disp.value=event.keyCode; side_leftKey.value=event.keyCode">
+					<input id="leftKeyIn" name="leftKeyIn" type="text" size="3" onkeydown="leftKeyIn.value='';leftKeyIn_disp.value=event.keyCode; setSideValues()">
 					<output id="leftKeyIn_disp" >37</output>
 				</p>
 				<p>
 					<label for="ballNum">Number of balls:</label>
-					<input type="range" name="ballNum" id="ballNum" value="50" min="50" max="89" oninput="ballNum_disp.value = ballNum.value; side_balls.value=ballNum.value;">
+					<input type="range" name="ballNum" id="ballNum" value="50" min="50" max="89" oninput="ballNum_disp.value = ballNum.value; setSideValues();">
 					<output id="ballNum_disp">50</output>
 				</p>
 				<p>
 					<label for="ball25">25 point balls:</label>
-					<input type="color" id="ball25" name="ball25" value="#00FF00" oninput="side_ball25.value = ball25.value">
+					<input type="color" id="ball25" name="ball25" value="#00FF00" oninput="setSideValues()">
 				</p>
 				<p>
 					<label for="ball15">15 point balls:</label>
-					<input type="color" id="ball15" name="ball15" value="#ff0000" oninput="side_ball15.value = ball15.value">
+					<input type="color" id="ball15" name="ball15" value="#ff0000" oninput="setSideValues()">
 				</p>
 				<p>
 					<label for="ball5">5 point balls:</label>
-					<input type="color" id="ball5" name="ball5" value="#000000" oninput="side_ball5.value = ball5.value">
+					<input type="color" id="ball5" name="ball5" value="#000000" oninput="setSideValues()">
 				</p>
 				<p>
 					<label for="duration">Duration:</label>
-					<input id="duration" name="duration" type="range" value="60" min="60" max="250" oninput="side_duration.value = duration.value;duration_disp.value=duration.value;">
+					<input id="duration" name="duration" type="range" value="60" min="60" max="250" oninput="duration_disp.value=duration.value;setSideValues();">
 					<output id="duration_disp">60</output>
 					<button id="optionsSubmit" class="button" type="submit" style="position: absolute;margin-left:6%;">Play Game</button>
 
 				</p>
 				<p>
 					<label for="monsterNum">Number of monsters:</label>
-					<input type="range" name="monsterNum" id="monsterNum" value="1" min="1" max="4" oninput="monsterNum_disp.value = monsterNum.value; side_monsters.value=monsterNum.value">
+					<input type="range" name="monsterNum" id="monsterNum" value="1" min="1" max="4" oninput="side_monsters.value=monsterNum.value;setSideValues();">
 					<output id="monsterNum_disp">1</output>
 				</p>
 
