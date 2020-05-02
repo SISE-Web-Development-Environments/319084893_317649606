@@ -966,7 +966,7 @@ function enterGodMode(){
 	godSound.play();
 	lastHundreadExcceded+=250;
 	godModeOn=true;
-	setTimeout(function () {godModeOn=false;pac_color="yellow";},60000);
+	setTimeout(function () {godModeOn=false;pac_color="yellow";},5000);
 	pac_color="#00FF00";
 }
 
