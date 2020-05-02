@@ -238,56 +238,39 @@ function Start() {
 		}
 	}
 
-	//insert monsters
-	for(let i=0;i<numOfMons;i++){
-		if(i==0){
-			board[0][0]=5;
-			blinky.i=0;
-			blinky.j=0;
-		}
-		else if(i==1){
-			board[0][boardJ-1]=6;
-			inky.i=0;
-			inky.j=boardJ-1;
-		}
-		else if(i==2){
-			board[boardI-1][0]=7;
-			pinky.i=boardI-1;
-			pinky.j=0;
-		}
-		else if(i==3){
-			board[boardI-1][boardJ-1]=8;
-			clyde.i=boardI-1;
-			clyde.j=boardJ-1;
-		}
+	//insert walls
+	var randomNumber=Math.floor(Math.random()*4+1);
+	if(randomNumber==1){
+		board[3][3] = 4;
+		board[3][4] = 4;
+		board[3][5] = 4;
+		board[6][1] = 4;
+		board[6][2] = 4;
+	}
+	else if(randomNumber==2){
+		board[3][3] = 4;
+		board[4][3] = 4;
+		board[5][3] = 4;
+		board[4][6] = 4;
+		board[5][6] = 4;
+	}
+	else if(randomNumber==3){
+		board[6][4] = 4;
+		board[6][5] = 4;
+		board[6][6] = 4;
+		board[3][2] = 4;
+		board[3][3] = 4;
+	}
+	else if(randomNumber==4){
+		board[2][6] = 4;
+		board[3][6] = 4;
+		board[4][6] = 4;
+		board[5][3] = 4;
+		board[6][3] = 4;
 	}
 
-
-	//insert walls
-	board[3][3] = 4;
-	board[3][4] = 4;
-	board[3][5] = 4;
-	board[6][1] = 4;
-	board[6][2] = 4;
-
-
-	//insert pacman
-	var emptyCell = findRandomEmptyCell(board);
-	shape.i = emptyCell[0];
-	shape.j = emptyCell[1];
-	board[shape.i][shape.j] = 2;
-
-	//insert star
-	if(checkCornersEmpty())
-		emptyCell=randomizeCorner(board);
-	else
-		emptyCell=findRandomEmptyCell(board);
-	board[emptyCell[0]][emptyCell[1]]=star.code;
-	star.i=emptyCell[0];
-	star.j=emptyCell[1];
-
 	//insert food
-	while (food_remain > 0) 
+	while (food_remain > 0)
 	{
 		var emptyCell = findRandomEmptyCell(board);
 
@@ -300,10 +283,10 @@ function Start() {
 				smallBall.amount--;
 				board[emptyCell[0]][emptyCell[1]] = smallBall.code;
 				done=true;
-			
+
 			}
 			else newrand=Math.random();
-		
+
 			if(newrand<0.5 && mediumBall.amount>0 && !done)
 			{
 				mediumBall.amount--;
@@ -320,9 +303,57 @@ function Start() {
 			}
 			else newrand=Math.random();
 		}
-		
+
 		food_remain--;
 	}
+
+	//insert monsters
+	for(let i=0;i<numOfMons;i++){
+		if(i==0){
+			blinky.i=0;
+			blinky.j=0;
+			saveEatenCandy(blinky,"blinky");
+			board[0][0]=5;
+		}
+		else if(i==1){
+			inky.i=0;
+			inky.j=boardJ-1;
+			saveEatenCandy(inky,"inky");
+			board[0][boardJ-1]=6;
+		}
+		else if(i==2){
+			pinky.i=boardI-1;
+			pinky.j=0;
+			saveEatenCandy(pinky,"pinky");
+			board[boardI-1][0]=7;
+		}
+		else if(i==3){
+			clyde.i=boardI-1;
+			clyde.j=boardJ-1;
+			saveEatenCandy(clyde,"clyde");
+			board[boardI-1][boardJ-1]=8;
+		}
+	}
+
+	//insert pacman
+	var emptyCell = findRandomEmptyCell(board);
+	shape.i = emptyCell[0];
+	shape.j = emptyCell[1];
+	board[shape.i][shape.j] = 2;
+
+
+
+	//insert star
+	if(checkCornersEmpty())
+		emptyCell=randomizeCorner(board);
+	else
+		emptyCell=findRandomEmptyCell(board);
+	star.i=emptyCell[0];
+	star.j=emptyCell[1];
+	saveEatenCandy(star,"star");
+	board[emptyCell[0]][emptyCell[1]]=star.code;
+
+
 
 
 
@@ -491,7 +522,7 @@ function UpdatePosition() {
 		intervalMon=setInterval(UpdateMonsterAndStarPosition,monstersSpeed*6);
 		setTimeout(function () {window.clearInterval(intervalMon);
 			intervalMon=setInterval(UpdateMonsterAndStarPosition,monstersSpeed);backMusic.playbackRate=1;
-		},10000);
+		},7000);
 	}
 	else if(board[shape.i][shape.j] == tube.code){
 		enterGodMode();
@@ -685,21 +716,21 @@ function moveMonster(MonsterName){
 		Monster.j--;
 
 	if(MonsterName=="blinky"){
-		returnEatenCandy(blinky,"blinky");
+		saveEatenCandy(blinky,"blinky");
 		board[blinky.i][blinky.j] = 5;
 	}
 	else if(MonsterName=="inky"){
-		returnEatenCandy(inky,"inky");
+		saveEatenCandy(inky,"inky");
 		board[inky.i][inky.j] = 6;
 	}
 
 	else if(MonsterName=="pinky"){
-		returnEatenCandy(pinky,"pinky");
+		saveEatenCandy(pinky,"pinky");
 		board[pinky.i][pinky.j] = 7;
 	}
 
 	else if(MonsterName=="clyde"){
-		returnEatenCandy(clyde,"clyde")
+		saveEatenCandy(clyde,"clyde")
 		board[clyde.i][clyde.j] = 8;
 	}
 
@@ -729,7 +760,7 @@ function moveStar(){
 
 
 
-	returnEatenCandy(star,"star");
+	saveEatenCandy(star,"star");
 	board[star.i][star.j] = star.code;
 }
 
@@ -778,24 +809,28 @@ function checkCollision(){
 				blinkyAte = 0;
 				blinky.i = 0;
 				blinky.j = 0;
+				saveEatenCandy(blinky,"blinky");
 				board[blinky.i][blinky.j] = 5;
 			} else if (i == 1) {
 				board[inky.i][inky.j] = inkyAte;
 				inkyAte = 0;
 				inky.i = 0;
 				inky.j = boardJ - 1;
+				saveEatenCandy(inky,"inky");
 				board[inky.i][inky.j] = 6;
 			} else if (i == 2) {
 				board[pinky.i][pinky.j] = pinkyAte;
 				pinkyAte = 0;
 				pinky.i = boardI - 1;
 				pinky.j = 0;
+				saveEatenCandy(pinky,"pinky");
 				board[pinky.i][pinky.j] = 7;
 			} else if (i == 3) {
 				board[clyde.i][clyde.j] = clydeAte;
 				clydeAte = 0;
 				clyde.i = boardI - 1;
 				clyde.j = boardJ - 1;
+				saveEatenCandy(clyde,"clyde");
 				board[clyde.i][clyde.j] = 8;
 			}
 		}
@@ -814,7 +849,7 @@ function checkCollision(){
 	else if(collisionFound&&godModeOn){
 		board[shape.i][shape.j]=2;
 		// window.clearInterval(intervalMon);
-		// setTimeout(function () {intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);},1000);
+		// setTimeout(function () {intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);},200);
 
 	}
 
@@ -867,7 +902,7 @@ function endGame(){
 	
 }
 
-function returnEatenCandy(MovingEntity,Name){
+function saveEatenCandy(MovingEntity,Name){
 	var MovingEntityAte;
 	if (board[MovingEntity.i][MovingEntity.j] == smallBall.code)
 		MovingEntityAte = smallBall.code;
@@ -901,7 +936,7 @@ function enterGodMode(){
 	godSound.play();
 	lastHundreadExcceded+=250;
 	godModeOn=true;
-	setTimeout(function () {godModeOn=false;pac_color="yellow";},3500);
+	setTimeout(function () {godModeOn=false;pac_color="yellow";},4500);
 	pac_color="#00FF00";
 }
 
