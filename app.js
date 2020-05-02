@@ -5,6 +5,7 @@ backMusic.volume = 0.05;
 var eatSound = new Audio("eat.wav" ) ;
 var dieSound = new Audio("die.wav" ) ;
 var godSound = new Audio("god.wav" ) ;
+var godPushSound = new Audio("godpush.mp3" ) ;
 var loseSound = new Audio("lose.mp3" ) ;
 var winSound = new Audio("winner.mp3" ) ;
 var soundVolume=1;
@@ -851,7 +852,7 @@ function checkCollision(){
 
 	}
 	else if(collisionFound&&godModeOn){
-		dieSound.play();
+		godPushSound.play();
 		board[shape.i][shape.j]=2;
 		if(blinkyCollision){
 			blinkyAte = 0;
@@ -1032,6 +1033,7 @@ function soundToggle()
 		dieSound.volume=0;
 		eatSound.volume=0;
 		godSound.volume=0;
+		godPushSound.volume=0;
 		loseSound.volume=0;
 		winSound.volume=0;
 		document.getElementById("soundIm").src = "soundoff.png";
@@ -1042,6 +1044,7 @@ function soundToggle()
 		dieSound.volume=1;
 		eatSound.volume=1;
 		godSound.volume=1;
+		godPushSound.volume=1;
 		loseSound.volume=1;
 		winSound.volume=1;
 		document.getElementById("soundIm").src = "soundon.png";
