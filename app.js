@@ -785,18 +785,22 @@ function randPacmanStart() {
 
 function checkCollision(){
 
-	let collisionFound = false;
-	for (let i = 0; i < numOfMons && !collisionFound; i++) {
+	let blinkyCollision = false;
+	let inkyCollision = false;
+	let pinkyCollision = false;
+	let clydeCollision = false;
+	for (let i = 0; i < numOfMons; i++) {
 		if (i == 0) {
-			collisionFound = (blinky.i == shape.i && blinky.j == shape.j);
+			blinkyCollision = (blinky.i == shape.i && blinky.j == shape.j);
 		} else if (i == 1) {
-			collisionFound = (inky.i == shape.i && inky.j == shape.j);
+			inkyCollision = (inky.i == shape.i && inky.j == shape.j);
 		} else if (i == 2) {
-			collisionFound = (pinky.i == shape.i && pinky.j == shape.j);
+			pinkyCollision = (pinky.i == shape.i && pinky.j == shape.j);
 		} else if (i == 3) {
-			collisionFound = (clyde.i == shape.i && clyde.j == shape.j);
+			clydeCollision = (clyde.i == shape.i && clyde.j == shape.j);
 		}
 	}
+	let collisionFound=(blinkyCollision||inkyCollision||pinkyCollision||clydeCollision);
 
 	if (collisionFound && !godModeOn) {
 		backMusic.playbackRate=1;
@@ -847,9 +851,35 @@ function checkCollision(){
 
 	}
 	else if(collisionFound&&godModeOn){
+		dieSound.play();
 		board[shape.i][shape.j]=2;
+		if(blinkyCollision){
+			blinkyAte = 0;
+			blinky.i = 0;
+			blinky.j = 0;
+			board[blinky.i][blinky.j] = 5;
+		}
+		if(inkyCollision){
+			inkyAte = 0;
+			inky.i = 0;
+			inky.j = boardJ - 1;
+			board[inky.i][inky.j] = 6;
+		}
+		if(pinkyCollision){
+			pinkyAte = 0;
+			pinky.i = boardI - 1;
+			pinky.j = 0;
+			board[pinky.i][pinky.j] = 7;
+		}
+		if(clydeCollision){
+			clydeAte = 0;
+			clyde.i = boardI - 1;
+			clyde.j = boardJ - 1;
+			board[clyde.i][clyde.j] = 8;
+		}
+
 		// window.clearInterval(intervalMon);
-		// setTimeout(function () {intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);},200);
+		// intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
 
 	}
 
@@ -936,7 +966,7 @@ function enterGodMode(){
 	godSound.play();
 	lastHundreadExcceded+=250;
 	godModeOn=true;
-	setTimeout(function () {godModeOn=false;pac_color="yellow";},4500);
+	setTimeout(function () {godModeOn=false;pac_color="yellow";},60000);
 	pac_color="#00FF00";
 }
 
