@@ -102,7 +102,7 @@ box-shadow: 0px 0px 20px rgba(56,56,56,.2);
 }
 #cssmenu > ul > li > a {
   z-index: 2;
-  padding: 18px 25px 12px 25px;
+  padding: 18px 25px 7px 25px;
   font-size: 20px;
   /* font-weight: bold; */
   font-style: italic;
@@ -128,7 +128,7 @@ box-shadow: 0px 0px 20px rgba(56,56,56,.2);
   right: 0;
   z-index: -1;
   width: 100%;
-  height: 120%;
+  height: 80%;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   content: "";
@@ -193,31 +193,32 @@ span.psw {
 /*-----------------------------pacman-gif-------------------------------------*/
 
 .pacman{
-  margin:0px 0px;
+  margin: 0px 0px;
   padding-left: 7%;
+    padding-top: 0.4%;
 }
 
 .pacman-top{
   background-color:yellow;
-  height:25px;
-  width:50px;
+  height:20px;
+  width:40px;
   border-radius:100px 100px 0 0;
   animation: spin1 0.5s infinite linear;
 }
 
 .pacman-bottom{
 background-color:yellow;
-  height:25px;
-  width:50px;
+  height:20px;
+  width:40px;
   border-radius:0 0 100px 100px;
   animation: spin2 0.5s infinite linear;
 }
 
 .feed {
-margin-top: -97px;
+margin-top: -85px;
 margin-left:15px;
-width: 10px;
-height: 10px;
+width: 5px;
+height: 5px;
 border-radius: 30%;
 -moz-animation: eat 1s linear 0s infinite;
 -webkit-animation: eat 1s linear 0s infinite;
@@ -258,44 +259,28 @@ animation: eat 1s linear 0s infinite;
 
 @keyframes eat {
 	0% { box-shadow: 
-      100px 65px 0 0 white, 
-      300px 65px 0 0 white, 
-      500px 65px 0 0 white, 
-      700px 65px 0 0 white,
-      900px 65px 0 0 white, 
-      1100px 65px 0 0 white, 
-      1300px 65px 0 0 white;}
-  
-100% { box-shadow: 
-      0px 65px 0 0 white, 
       100px 65px 0 0 white,
       300px 65px 0 0 white, 
-      500px 65px 0 0 white, 
-      700px 65px 0 0 white, 
-      900px 65px 0 0 white, 
-      1100px 65px 0 0 white;}
+      500px 65px 0 0 white;}
+  
+100% { box-shadow:
+      0px 65px 0 0 white, 
+      100px 65px 0 0 white,
+      300px 65px 0 0 white;}
 }
 
 
 
 @-moz-keyframes eat {
-	0% { box-shadow: 
-      100px 65px 0 0 white, 
-      300px 65px 0 0 white, 
-      500px 65px 0 0 white, 
-      700px 65px 0 0 white,
-      900px 65px 0 0 white, 
-      1100px 65px 0 0 white, 
-      1300px 65px 0 0 white;}
+	0% { box-shadow:
+      100px 65px 0 0 white,
+      300px 65px 0 0 white,
+      500px 65px 0 0 white;}
   
-100% { box-shadow: 
+100% { box-shadow:
       0px 65px 0 0 white, 
       100px 65px 0 0 white,
-      300px 65px 0 0 white, 
-      500px 65px 0 0 white, 
-      700px 65px 0 0 white, 
-      900px 65px 0 0 white, 
-      1100px 65px 0 0 white;}
+      300px 65px 0 0 white;}
 }
 
 
@@ -304,20 +289,12 @@ animation: eat 1s linear 0s infinite;
 	0% { box-shadow: 
       100px 65px 0 0 white, 
       300px 65px 0 0 white, 
-      500px 65px 0 0 white, 
-      700px 65px 0 0 white,
-      900px 65px 0 0 white, 
-      1100px 65px 0 0 white, 
-      1300px 65px 0 0 white;}
+      500px 65px 0 0 white;}
   
-100% { box-shadow: 
+100% { box-shadow:
       0px 65px 0 0 white, 
       100px 65px 0 0 white,
-      300px 65px 0 0 white, 
-      500px 65px 0 0 white, 
-      700px 65px 0 0 white, 
-      900px 65px 0 0 white, 
-      1100px 65px 0 0 white;}
+      300px 65px 0 0 white;}
 }
 
 /*------------------------------------canvas-------------------------------------*/
