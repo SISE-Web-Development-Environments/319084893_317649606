@@ -72,7 +72,7 @@ var inkyAte;
 var pinkyAte;
 var clydeAte;
 var starAte;
-var packmanSpeed=160;
+var packmanSpeed=145;
 var monstersSpeed=280;
 var snailSpeed=4000;
 //endregion
@@ -88,9 +88,8 @@ snail.code=12;
 tube.code=13;
 var starEaten;
 var snailEaten;
-var candiesCounter;
-var lastHundreadExcceded;
 var godModeOn;
+var allCandiedEaten;
 
 
 
@@ -166,42 +165,7 @@ $(document).ready(function() {
 
 	});
 
-	// $("#restartBut").click(function(){
-	// 	window.clearInterval(intervalPac);
-	// 	window.clearInterval(intervalMon);
-	// 	window.clearInterval(intervalSnail);
-	// 	if (confirm("Are you sure you want to restart the game?")) 
-	// 	{
-	// 		bigBall.amount=numOfBalls*0.1;
-	// 		mediumBall.amount=numOfBalls*0.3;
-	// 		smallBall.amount=numOfBalls*0.6;
-	// 		maxPoints=smallBall.amount*5+mediumBall.amount*15+bigBall.amount*25;
-	// 		Start();
-	// 	} 
-	// 	else 
-	// 	{
-	// 		intervalPac = setInterval(UpdatePosition, packmanSpeed);
-	// 		intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
-	// 		intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
-	// 	}
-	// });
 
-	// $("#newGameBut").click(function(){
-	// 	window.clearInterval(intervalPac);
-	// 	window.clearInterval(intervalMon);
-	// 	window.clearInterval(intervalSnail);
-	// 	if (confirm("Are you sure you want to start a new game?")) 
-	// 	{
-	// 		$(".screen").hide();
-	// 		$("#optionsScreen").show();
-	// 	} 
-	// 	else 
-	// 	{
-	// 		intervalPac = setInterval(UpdatePosition, packmanSpeed);
-	// 		intervalMon = setInterval(UpdateMonsterAndStarPosition, monstersSpeed);
-	// 		intervalSnail = setInterval(UpdateSnailPosition, snailSpeed);
-	// 	}
-	// });
 
 });
 
@@ -504,17 +468,14 @@ function UpdatePosition() {
 	if (board[shape.i][shape.j] == smallBall.code) {
 		eatSound.play();
 		score += 5;
-		candiesCounter--;
-	} 
+	}
 	else if (board[shape.i][shape.j] == mediumBall.code) {
 		eatSound.play();
 		score += 15;
-		candiesCounter--;
-	} 
+	}
 	else if (board[shape.i][shape.j] == bigBall.code) {
 		eatSound.play();
 		score += 25;
-		candiesCounter--;
 	}
 	else if(board[shape.i][shape.j] == snail.code){
 		backMusic.playbackRate=0.3;
@@ -535,12 +496,15 @@ function UpdatePosition() {
 	checkCollision();
 
 
+
+
 	var currentTime = new Date();
 	time_elapsed = (gameDuration - (currentTime - start_time)) / 1000;
-	if (time_elapsed <= 0 || score >= maxPoints||candiesCounter==0)
+	allCandiedEaten=checkIfAllCandiesEaten();
+	if (time_elapsed <= 0 || score >= maxPoints||allCandiedEaten)
 		endGame();
+	
 	Draw();
-
  
 }
 
@@ -907,9 +871,9 @@ function endGame(){
 	else if(score>=maxPoints)
 	{
 		winSound.play();
-		alert("Game Completed!!!");
+		alert("Winner!!!");
 	}
-	else if(time_elapsed<=0||candiesCounter==0){
+	else if(time_elapsed<=0||allCandiedEaten){
 		if(score<100)
 		{
 			loseSound.play();
@@ -965,9 +929,8 @@ function saveEatenCandy(MovingEntity,Name){
 
 function enterGodMode(){
 	godSound.play();
-	lastHundreadExcceded+=250;
 	godModeOn=true;
-	setTimeout(function () {godModeOn=false;pac_color="yellow";},5000);
+	setTimeout(function () {godModeOn=false;pac_color="yellow";},5200);
 	pac_color="#00FF00";
 }
 
@@ -1078,13 +1041,13 @@ function initializeGameParameters(){
 	starAte=0;
 	starEaten=false;
 	snailEaten=false;
-	lastHundreadExcceded=200;
 	godModeOn=false;
 
 	score = 0;
-	lives=100;
+	lives=5;
 	pac_color = "yellow";
-	candiesCounter= numOfBalls;
+
+	allCandiedEaten=false;
 
 
 	let n=0;
@@ -1134,6 +1097,17 @@ function setSideValues()
 	document.getElementById("side_ball5").style.color = document.getElementById("ball5").value;
 	side_duration.value = document.getElementById("duration_disp").value;
 	side_monsters.value=document.getElementById("monsterNum_disp").value;
+}
+
+function checkIfAllCandiesEaten(){
+	for(let i=0;i<boardI;i++){
+		for(let j=0;j<boardJ;j++){
+			if(board[i][j]==smallBall.code||board[i][j]==mediumBall.code||board[i][j]==bigBall.code)
+				return false;
+		}
+	}
+	return true;
+
 }
 
 
