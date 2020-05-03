@@ -1110,6 +1110,3 @@ function checkIfAllCandiesEaten(){
 
 }
 
-
-
-

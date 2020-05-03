@@ -69,8 +69,11 @@ $(document).ready(function() {
                 equalTo: "#password"
             },
             email: {
-            required: true,
-            email: true
+                required: true,
+                email: true
+            },
+            birthday: {
+                required: true
             }
         }
     });
