@@ -72,7 +72,7 @@ var inkyAte;
 var pinkyAte;
 var clydeAte;
 var starAte;
-var packmanSpeed=145;
+var packmanSpeed=140;
 var monstersSpeed=280;
 var snailSpeed=4000;
 //endregion
@@ -481,7 +481,7 @@ function UpdatePosition() {
 		backMusic.playbackRate=0.3;
 		snailEaten=true;
 		window.clearInterval(intervalMon);
-		intervalMon=setInterval(UpdateMonsterAndStarPosition,monstersSpeed*6);
+		intervalMon=setInterval(UpdateMonsterAndStarPosition,monstersSpeed*4);
 		setTimeout(function () {window.clearInterval(intervalMon);
 			intervalMon=setInterval(UpdateMonsterAndStarPosition,monstersSpeed);backMusic.playbackRate=1;
 		},7000);
@@ -491,7 +491,6 @@ function UpdatePosition() {
 	}
 	board[shape.i][shape.j] = 2;
 
-	//enterGodMode();
 
 	checkCollision();
 
@@ -853,7 +852,6 @@ function checkCollision(){
 	if(!starEaten&&(star.i==shape.i&&star.j==shape.j)){
 		starEaten=true;
 		score+=50;
-		//enterGodMode();
 	}
 
 }
@@ -930,7 +928,7 @@ function saveEatenCandy(MovingEntity,Name){
 function enterGodMode(){
 	godSound.play();
 	godModeOn=true;
-	setTimeout(function () {godModeOn=false;pac_color="yellow";},5200);
+	setTimeout(function () {godModeOn=false;pac_color="yellow";},4000);
 	pac_color="#00FF00";
 }
 
