@@ -187,7 +187,7 @@ function Start() {
 	backMusic.pause();
 	musicToggle();
 	if(soundVolume==0) soundToggle();
-	showUser.value="Hello, "+document.getElementById("tryUsername").value;;
+	showUser.value=document.getElementById("tryUsername").value;;
 	board = new Array();
 	initializeGameParameters();
 	var food_remain = (smallBall.amount+mediumBall.amount+bigBall.amount);
