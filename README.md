@@ -2,7 +2,7 @@
 
 Hey user, welcome to "MSPacman"
 
-https://sise-web-development-environments.github.io/assignment2-Sean-Maxim/
+https://sise-web-development-environments.github.io/319084893_317649606/
 
 
 In order to start the game you either need to register (press "Sign Up" button) with your own register parameters or if you already has a user,
