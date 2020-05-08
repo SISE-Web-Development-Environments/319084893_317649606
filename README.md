@@ -20,8 +20,8 @@ In the "Game playing screen" there are few things you should know about them:
 If the pacman eats the snail, all the monsters will move slow for a few seconds (and the game music will start to play with slow motion too :)).
 
 - Second functionality we have added is the "God mode" power. You can see a green tube icon that "stands" on the same place on the board.
-If the pacman eats the tube, the pacman turns to green and gets power for a few seconds. The power is than every time it tackles with a monsters, the pacman will not die and 
-instead the specific monster that the pacman tackled with will be pushed to its initial place on the board.
+If the pacman eats the tube, the pacman turns to green and gets power for a few seconds. The power is that every time the pacman tackles with a monster, the pacman will not die  
+and the specific monster that the pacman tackled with will be pushed to its initial place on the board.
 
 - A moving star icon that if the pacman eats it, 50 points will be added to his score.
 
